@@ -1,0 +1,51 @@
+{
+  "manifestVersion": 1,
+  "id": "QAExt",
+  "name": "Synopsys Security Scan",
+  "version": "1.8.2",
+  "publisher": "QAExt",
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "tags": [
+    "Polaris",
+    "Synopsys",
+    "Coverity",
+    "Black Duck",
+    "Continuous Integration",
+    "Security",
+    "Open Source",
+    "Build"
+  ],
+  "description": "Run security scans on Polaris, Black Duck or Coverity platforms",
+  "categories": [
+    "Azure Pipelines"
+  ],
+  "icons": {
+    "default": "images/icon.png"
+  },
+  "files": [
+    {
+      "path": "synopsys-task"
+    }
+  ],
+  "content": {
+    "details": {
+      "path": "overview.md"
+    }
+  },
+  "contributions": [
+    {
+      "id": "synopsys-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "synopsys-task"
+      }
+    }
+  ]
+}

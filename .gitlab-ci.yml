@@ -1,0 +1,74 @@
+# include:
+#   - local: '.gitlab-ci-template.yml'
+#   - project: clops/gitlab-ci-pop-analysis
+#     ref: master
+#     file: pop_analysis.yaml
+#   - project: releng/common-gitlab-ci
+#     ref: master
+#     file: sbom-generate.yml
+#   - project: altair/altair-build-common
+#     ref: master
+#     file: gitlab/ci/altair_versioning.yml
+#   - project: altair/altair-build-common
+#     ref: master
+#     file: gitlab/ci/altair_common.yml
+#   - project: qa-automation/test-integrations
+#     ref: main
+#     file: _ci/e2e_azure.yml
+
+
+# List of job stages in their order of execution.
+stages:
+  # - build
+  # - unit_test_and_coverage
+  - test-publish
+
+variables:
+#  BUILD_TOOL: npm
+#  GIT_DEPTH: 10
+#  BD_PRODUCT_GROUP: PolarisNG Projects Group
+#  BD_VERSION_PHASE: DEVELOPMENT
+  PUBLISHER_ID: test
+  ORG_NAME : test
+#  TESTNG_FAILED_XML: test-output/testng-failed.xml
+#  DISABLE_POLARIS_CLASSIC_ANALYSIS: "true"
+  AZURE_TOKEN: $azure_token
+
+
+##### MERGE REQUEST PIPELINE #####
+image: node:20
+
+test-publish:
+  stage: test-publish
+  tags:
+    - linux
+  before_script:
+     - apt-get update && apt-get install -y ca-certificates gnupg uuid-runtime jq
+     - curl -sL https://deb.nodesource.com/setup_20.x | bash
+     - apt-get install -y nodejs
+     - npm install -g npm@10.2.4
+     - node -v
+     - npm version
+#     - npm install -g tfx-cli
+  variables:
+      PUBLISHER_ID: "TestCIPub"
+      ORG_NAME: "synopsys-extension-testing"
+  script:
+    - echo $PUBLISHER_ID
+    - echo $ORG_NAME
+    - npm i -g tfx-cli
+    - tfx extension publish --publisher TestCIPub --manifest-globs vss-extension.json --token ${AZURE_TOKEN}
+
+# build:
+#   extends:
+#     - .build
+#   stage: build
+
+# unit_test_and_coverage_job:
+#   stage: unit_test_and_coverage
+#   extends:
+#     -  .unit_test_and_coverage
+#   dependencies: [build_job]
+
+
+
