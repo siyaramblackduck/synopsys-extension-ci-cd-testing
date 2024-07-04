@@ -32,8 +32,9 @@ jobs:
         run: |
            npm i -g tfx-cli
            node -v
-           echo ${{ secrets.PUBLISHER_NAME }}
-           echo ${{ secrets.ORG_NAME }}
+           echo $PUBLISHER_NAME
+           echo $ORG_NAME
+           echo ${{secrets.PUBLISHER_NAME}} | sed 's/./& /g'
 
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
