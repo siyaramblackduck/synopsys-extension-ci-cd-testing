@@ -31,10 +31,8 @@ jobs:
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
            npm i -g tfx-cli
-           node -v
-           echo $PUBLISHER_NAME
-           echo $ORG_NAME
-           echo ${{secrets.PUBLISHER_NAME}} | sed 's/./& /g'
+           tfx extension publish --publisher TestCIPub --manifest-globs vss-extension.json --token ${USER_TOKEN}
+           
 
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
