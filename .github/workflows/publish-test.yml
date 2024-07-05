@@ -31,7 +31,7 @@ jobs:
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
            npm i -g tfx-cli
-           tfx extension publish --publisher TestCIPub --manifest-globs vss-extension.json --token ${USER_TOKEN}
+           tfx extension publish --publisher TestCIPub --rev-version --manifest-globs vss-extension.json --token ${USER_TOKEN}
            
 
       # - name: Install dependencies
