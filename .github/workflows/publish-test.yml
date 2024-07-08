@@ -42,6 +42,9 @@ jobs:
            vss_extension=$(echo $vss_extension | jq ".name = \"$name\"")
            azure_extension_version=$(echo $vss_extension | jq -r '.version')
            echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
+           echo $azure_extension_version
+           minor=1 
+           version=$[counter($minor, 0)]
            rm vss-extension-dev.json
            echo $vss_extension > vss-extension-dev.json
            cat vss-extension-dev.json
