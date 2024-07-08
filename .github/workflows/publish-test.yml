@@ -31,12 +31,13 @@ jobs:
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
           MAJOR: 1
           MINOR: 0
-          PATCH: $[counter(env['MINOR'], 0)]
+          PATCH: $[counter($MINOR, 0)]
           VERSION: $MAJOR.$MINOR.$PATCH
         run: |
-            echo $PATCH | tr -d '%' | sed 's/,/./g'
-            echo $VERSION | tr -d '%' | sed 's/,/./g'
-            echo $MINOR
+            echo $PATCH
+            echo $VERSION
+            echo $MAJOR.$MINOR
+            echo '$MAJOR.$MINOR'
 
 #           name="Synopsys-security-scan"
 #           echo $name
