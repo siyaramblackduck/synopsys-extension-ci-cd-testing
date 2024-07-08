@@ -36,8 +36,7 @@ jobs:
         run: |
             echo ${MAJOR}
             echo ${PATCH}
-            echo $[counter(variables['MINOR'], 0)]
-            echo $(MAJOR).$(MINOR).$(PATCH)
+            echo ${VERSION}
 
 #           name="Synopsys-security-scan"
 #           echo $name
