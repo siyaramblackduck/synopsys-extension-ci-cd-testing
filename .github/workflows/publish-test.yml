@@ -31,11 +31,12 @@ jobs:
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
           MAJOR: 1
           MINOR: 0
-          PATCH: $[counter(env[$MINOR], 0)]
+          PATCH: $[counter($MINOR, 0)]
           VERSION: $MAJOR.$MINOR.$PATCH
         run: |
            name="Synopsys-security-scan"
            echo $name
+           echo $PATCH
            echo "EXTENSION_NAME=$name" >> build.env
            vss_extension=$(cat vss-extension-dev.json)
            vss_extension=$(echo $vss_extension | jq ".id = \"$name\"")
@@ -49,6 +50,8 @@ jobs:
            echo $major
            echo $minor
            echo $patch
+           v=$[counter($minor, 0)]
+           echo $v
            rm vss-extension-dev.json
            echo $vss_extension > vss-extension-dev.json
            echo $vss_extension > vss-extension.json
