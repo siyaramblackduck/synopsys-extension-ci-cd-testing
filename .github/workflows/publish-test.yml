@@ -34,7 +34,7 @@ jobs:
           PATCH: $[counter(variables['MINOR'], 0)]
           VERSION: ${MAJOR}.${MINOR}.${PATCH}
         run: |
-            echo ${MINOR}
+            echo $MINOR
             echo ${PATCH}
             echo ${VERSION}
 
