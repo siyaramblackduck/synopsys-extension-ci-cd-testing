@@ -39,11 +39,7 @@ jobs:
           ORG_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
-           uuid=$(uuidgen)
-           echo $uuid
-           t=$(date +"%s")
-           echo $t
-           name="Synopsys-security-scan-"$t
+           name="Synopsys-security-scan"
            echo $name
            echo "EXTENSION_NAME=$name" >> build.env
            vss_extension=$(cat vss-extension.json)
