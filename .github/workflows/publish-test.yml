@@ -36,7 +36,7 @@ jobs:
         run: |
            name="Synopsys-security-scan"
            echo $name
-           echo $PATCH
+           echo $[counter(1, 0)]
            echo "EXTENSION_NAME=$name" >> build.env
            vss_extension=$(cat vss-extension-dev.json)
            vss_extension=$(echo $vss_extension | jq ".id = \"$name\"")
