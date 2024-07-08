@@ -44,6 +44,7 @@ jobs:
            echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
            rm vss-extension-dev.json
            echo $vss_extension > vss-extension-dev.json
+           cat vss-extension-dev.json
 #           cd synopsys-task
 #           task_json=$(cat task.json)
 #           task_json=$(echo $task_json | jq ".name = \"$name\"")
@@ -55,7 +56,7 @@ jobs:
 #           echo $task_json > task.json
 #           cat task.json
 #           cd ..
-           cat vss-extension-dev.json
+
 #           npm i -g tfx-cli
 #           tfx extension publish --publisher TestCIPub --rev-version --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 
