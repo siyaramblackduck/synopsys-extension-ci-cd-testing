@@ -50,8 +50,10 @@ jobs:
            echo $major
            echo $minor
            echo $patch
-           v=$[counter($minor, 0)]
+           v=$(major).$(minor).$(Rev:r)
            echo $v
+           v1=$major.$minor.$Rev:r
+           echo $v1
            rm vss-extension-dev.json
            echo $vss_extension > vss-extension-dev.json
            echo $vss_extension > vss-extension.json
