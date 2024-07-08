@@ -13,12 +13,6 @@ on:
       - '**.md'
   workflow_dispatch:
 
-env:
-  MAJOR: 1
-  MINOR: 0
-  PATCH: $[counter(variables['MINOR'], 0)]
-  VERSION: '$(MAJOR).$(MINOR).$(PATCH)'
-
 jobs:
   publish-test:
     runs-on: ubuntu-latest
@@ -35,9 +29,16 @@ jobs:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORG_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
+          MAJOR: 1
+          MINOR: 0
+          PATCH: $[counter(variables['MINOR'], 0)]
+          VERSION: '$(MAJOR).$(MINOR).$(PATCH)'
         run: |
+            echo ${MAJOR}
+            echo ${PATCH}
             echo $[counter(variables['MINOR'], 0)]
             echo $(MAJOR).$(MINOR).$(PATCH)
+
 #           name="Synopsys-security-scan"
 #           echo $name
 #           echo "EXTENSION_NAME=$name" >> build.env
