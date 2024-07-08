@@ -2,8 +2,9 @@
   "manifestVersion": 1,
   "id": "QAExt",
   "name": "Synopsys Security Scan",
-  "version": "1.8.2",
-  "publisher": "QAExt",
+  "version": "0.0.1",
+  "publisher": "TestCIPub",
+  "public": false,
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
