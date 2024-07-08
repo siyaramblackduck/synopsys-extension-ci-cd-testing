@@ -32,10 +32,11 @@ jobs:
           MAJOR: 1
           MINOR: 0
           PATCH: $[counter(env['MINOR'], 0)]
-          VERSION: ${MAJOR}.${MINOR}.${PATCH}
+          VERSION: $MAJOR.$MINOR.$PATCH
         run: |
-            echo $PATCH
-            echo $VERSION
+            echo $PATCH | tr -d '%' | sed 's/,/./g'
+            echo $VERSION | tr -d '%' | sed 's/,/./g'
+            echo $MINOR
 
 #           name="Synopsys-security-scan"
 #           echo $name
