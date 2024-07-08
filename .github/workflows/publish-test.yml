@@ -35,8 +35,8 @@ jobs:
           VERSION: ${MAJOR}.${MINOR}.${PATCH}
         run: |
             echo $MINOR
-            echo ${PATCH}
-            echo ${VERSION}
+            echo $PATCH
+            echo $VERSION
 
 #           name="Synopsys-security-scan"
 #           echo $name
