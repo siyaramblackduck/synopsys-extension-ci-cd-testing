@@ -36,8 +36,8 @@ jobs:
           ORG_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
-            echo $(PATCH) | sed 's/./& /g'
-            echo $(VERSION) | sed 's/./& /g'
+            echo $[counter(variables['minor'], 0)]
+            echo '$(MAJOR).$(MINOR).$(PATCH)'
 #           name="Synopsys-security-scan"
 #           echo $name
 #           echo "EXTENSION_NAME=$name" >> build.env
