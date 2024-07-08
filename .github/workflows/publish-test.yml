@@ -32,7 +32,7 @@ jobs:
           MAJOR: 1
           MINOR: 0
           PATCH: $[counter(variables['MINOR'], 0)]
-          VERSION: $(MAJOR).$(MINOR).$(PATCH)
+          VERSION: ${MAJOR}.${MINOR}.${PATCH}
         run: |
             echo ${MINOR}
             echo ${PATCH}
