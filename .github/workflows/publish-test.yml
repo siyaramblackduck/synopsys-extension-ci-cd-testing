@@ -60,8 +60,6 @@ jobs:
               echo $major.$(minor+1).0
           elif [[ "$commit" == *"fix"* ]]; then
               echo $major.$minor.$(patch+1)
-          el
-             echo $azure_extension_version
 #          echo $version
 #           rm vss-extension-dev.json
 #           echo $vss_extension > vss-extension-dev.json
