@@ -38,8 +38,7 @@ jobs:
            name="Synopsys-security-scan"
            echo $name
            echo "EXTENSION_NAME=$name" >> build.env
-           npm install
-           commit_message = $(git log --format=%B -n 1)
+           echo "${{toJSON(github.event)}}"
            echo commit_message
            vss_extension=$(cat vss-extension-dev.json)
            vss_extension=$(echo $vss_extension | jq ".id = \"$name\"")
