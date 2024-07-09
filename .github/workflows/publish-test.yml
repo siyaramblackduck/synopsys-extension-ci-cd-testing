@@ -60,7 +60,7 @@ jobs:
           elif [[ "$commit" == "feat" ]];
           then
               echo $major.$((minor+1)).0
-          elif [[ "$commit" == "fix" ]]; 
+          elif [[ "$commit" == *"fix"* ]]; 
           then
               echo $major.$minor.$((patch+1))
           fi
