@@ -39,11 +39,10 @@ jobs:
           name="Synopsys-security-scan"
           echo $name
           echo "EXTENSION_NAME=$name" >> build.env
-          vss_extension=$(cat vss-extension-dev.json)
-          vss_extension=$(echo $vss_extension | jq ".id = \"$name\"")
-          vss_extension=$(echo $vss_extension | jq ".name = \"$name\"")
-          azure_extension_version=$(echo $vss_extension | jq -r '.version')
-          echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
+          vss_extension_dev=$(cat vss-extension-dev.json)
+          vss_extension_dev=$(echo $vss_extension_dev | jq ".id = \"$name\"")
+          vss_extension_dev=$(echo $vss_extension_dev | jq ".name = \"$name\"")
+          azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo $azure_extension_version
           major=$(echo $azure_extension_version | awk -F. '{print $1}')
           minor=$(echo $azure_extension_version | awk -F. '{print $2}')
@@ -60,10 +59,15 @@ jobs:
              version=$major.$((minor+1)).0
           elif [[ "$commit" == "fix" ]]; then
              version=$major.$minor.$((patch+1))
+          el
+             version=$azure_extension_version
           fi
           echo $version
           echo "version=$azure_extension_version" >> vss-extension-dev.json
           cat vss-extension-dev.json
+          echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
+          echo "version=$version" >> vss_extension_dev
+          cat vss_extension_dev
 #          echo $version
 #           rm vss-extension-dev.json
 #           echo $vss_extension > vss-extension-dev.json
