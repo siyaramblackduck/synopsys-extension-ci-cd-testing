@@ -56,13 +56,13 @@ jobs:
           commit=$(echo "$commit_message" | awk -F: '{print $1}') 
           if [[ "$commit" == "BREAKING CHANGE" ]];
           then
-              echo $(major+1).0.0
+              echo $((major+1)).0.0
           elif [[ "$commit" == "feat" ]];
           then
-              echo $major.$(minor+1).0
+              echo $major.$((minor+1)).0
           elif [[ "$commit" == "fix" ]]; 
           then
-              echo $major.$minor.$(patch+1)
+              echo $major.$minor.$((patch+1))
           fi
           echo $commit
 #          echo $version
