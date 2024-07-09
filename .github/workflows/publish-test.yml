@@ -63,7 +63,7 @@ jobs:
              version=$azure_extension_version
           fi
           echo $version
-          echo ".version=$version" >> vss-extension-dev.json
+          echo jq --arg ".version=$version" >> vss-extension-dev.json
           cat vss-extension-dev.json
           echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
 #          echo $version
