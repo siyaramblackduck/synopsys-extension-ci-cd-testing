@@ -24,9 +24,6 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: semantic-release
-        run: npx semantic-release
-
       - name: publish-extension
         env:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
@@ -41,6 +38,7 @@ jobs:
            name="Synopsys-security-scan"
            echo $name
            echo $[counter(1, 0)]
+           npx semantic-release
            echo "EXTENSION_NAME=$name" >> build.env
            vss_extension=$(cat vss-extension-dev.json)
            vss_extension=$(echo $vss_extension | jq ".id = \"$name\"")
