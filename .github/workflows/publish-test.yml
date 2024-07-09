@@ -47,11 +47,7 @@ jobs:
           major=$(echo $azure_extension_version | awk -F. '{print $1}')
           minor=$(echo $azure_extension_version | awk -F. '{print $2}')
           patch=$(echo $azure_extension_version | awk -F. '{print $3}')
-          echo $major
-          echo $minor
-          echo $patch
           echo $commit_message
-          echo "title=$(git log --format=%B -n 1 HEAD | head -n 1)"
           commit=$(echo "$commit_message" | awk -F: '{print $1}') 
           if [[ "$commit" == "BREAKING CHANGE" ]]; then
              version=$((major+1)).0.0
@@ -59,6 +55,8 @@ jobs:
              version=$major.$((minor+1)).0
           elif [[ "$commit" == "fix" ]]; then
              version=$major.$minor.$((patch+1))
+          else
+            version=$azure_extension_version
           fi
           echo $version
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
