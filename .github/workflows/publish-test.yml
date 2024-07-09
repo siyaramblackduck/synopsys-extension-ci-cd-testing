@@ -39,7 +39,7 @@ jobs:
            name="Synopsys-security-scan"
            echo $name
            echo "EXTENSION_NAME=$name" >> build.env
-           echo commit_message
+           echo $commit_message
 #           vss_extension=$(cat vss-extension-dev.json)
 #           vss_extension=$(echo $vss_extension | jq ".id = \"$name\"")
 #           vss_extension=$(echo $vss_extension | jq ".name = \"$name\"")
