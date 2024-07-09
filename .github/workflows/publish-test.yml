@@ -63,11 +63,11 @@ jobs:
           elif [[ "$commit" == *"fix"* ]]; 
           then
               echo $major.$minor.$((patch+1))
-          
+          fi
           if [[ "$commit" == "Fix" ]]; 
           then
               echo "a"
-          
+          fi
           if [[ "$commit" == "fix" ]]; 
           then
               echo "b"
