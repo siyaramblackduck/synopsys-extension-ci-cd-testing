@@ -54,13 +54,7 @@ jobs:
           echo $commit_message
           echo "title=$(git log --format=%B -n 1 HEAD | head -n 1)"
           echo commit=$(echo "$commit_message" | awk -F: '{print $1}') 
-          if [[ "$commit" == "BREAKING CHANGE" ]];
-          then
-              echo $(major+1).0.0
-          elif [[ "$commit" == "feat" ]];
-          then
-              echo $major.$(minor+1).0
-          elif [[ "$commit" == "fix" ]]; 
+          if [[ "$commit" == "fix" ]]; 
           then
               echo $major.$minor.$(patch+1)
           echo "$commit"
