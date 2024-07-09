@@ -34,7 +34,6 @@ jobs:
           MINOR: 0
           PATCH: $[counter($MINOR, 0)]
           VERSION: $MAJOR.$MINOR.$PATCH
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
           commit_message: ${{ github.event.head_commit.message }}
         run: |
           name="Synopsys-security-scan"
@@ -69,6 +68,9 @@ jobs:
         if: steps.publish-extension.conclusion == 'success'
         run: |
           echo "updating version"
+          git config --global user.useConfigOnly true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
 
