@@ -62,7 +62,9 @@ jobs:
              version=$major.$minor.$((patch+1))
           fi
           echo $version
-          echo $commit
+          echo "version=$azure_extension_version" >> vss-extension-dev.json
+          cat vss-extension-dev.json
+          cat vss-extension
 #          echo $version
 #           rm vss-extension-dev.json
 #           echo $vss_extension > vss-extension-dev.json
