@@ -73,6 +73,7 @@ jobs:
               echo "b"
           fi
           echo $commit
+
 #          echo $version
 #           rm vss-extension-dev.json
 #           echo $vss_extension > vss-extension-dev.json
