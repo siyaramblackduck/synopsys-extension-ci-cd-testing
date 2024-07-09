@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
-  "id": "QAExt",
-  "name": "Synopsys Security Scan",
+  "id": "QAtest",
+  "name": "extensionTest",
   "version": "0.0.1",
   "publisher": "TestCIPub",
   "public": false,
