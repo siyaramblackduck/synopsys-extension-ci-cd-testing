@@ -69,7 +69,6 @@ jobs:
 #               "*.vsix"
 
 
-
       - name: update extension version
         if: steps.publish-extension.conclusion == 'success'
         run: |
