@@ -73,7 +73,6 @@ jobs:
         if: steps.publish-extension.conclusion == 'success'
         run: |
           echo "updating version"
-          git config --global user.useConfigOnly true
           git add vss-extension-dev.json
           git commit -m "update extension version"
         env:
