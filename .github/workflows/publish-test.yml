@@ -63,10 +63,10 @@ jobs:
           echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
 #          npm i -g tfx-cli
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
-        with:
-            name: publish-extension
-            path:
-               "*.vsix"
+#        with:
+#            name: publish-extension
+#            path:
+#               "*.vsix"
 
 
 
