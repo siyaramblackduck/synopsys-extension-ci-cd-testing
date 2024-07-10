@@ -65,8 +65,9 @@ jobs:
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
         with:
             name: publish-extension
-            path: "*.vsix"
-            
+            path:
+               "*.vsix"
+
 
 
       - name: update extension version
