@@ -88,6 +88,7 @@ jobs:
           git commit -m "update extension version [skip ci]"
 #          git push
 
+
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
 
