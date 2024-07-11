@@ -87,11 +87,10 @@ jobs:
           echo  "$(git log -n 1 --pretty=format:%ae)"    
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b automatic_version_update
+#          git checkout -b automatic_version_update
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
-          git push origin automatic_version_update
-          echo gh --version
+          git push origin main
           gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
           gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
