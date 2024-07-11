@@ -85,8 +85,6 @@ jobs:
           echo "updating version"
           echo config --local user.name "$(git log -n 1 --pretty=format:%an)"
           echo config --local user.email "$(git log -n 1 --pretty=format:%ae)"    
-#          git config --local user.name "github-actions[bot]"
-#          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
           git push origin main
