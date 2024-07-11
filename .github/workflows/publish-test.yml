@@ -83,13 +83,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           echo "updating version"
-          echo  "$(git log -n 1 --pretty=format:%an)"
-          echo  "$(git log -n 1 --pretty=format:%ae)"    
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          echo config --local user.name "$(git log -n 1 --pretty=format:%an)"
+          echo config --local user.email "$(git log -n 1 --pretty=format:%ae)"    
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git create -b automatic_version_update
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
-          git push origin main
+          git push origin automatic_version_update
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
