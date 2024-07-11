@@ -68,7 +68,7 @@ jobs:
           echo $version
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           cat vss-extension-dev.json
-          echo "AZURE_EXTENSION_VERSION=$azure_extension_version"
+          echo "AZURE_EXTENSION_VERSION=$version"
 #          npm i -g tfx-cli
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 #        with:
