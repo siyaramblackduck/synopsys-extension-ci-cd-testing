@@ -93,7 +93,7 @@ jobs:
           git push origin automatic_version_update
           echo gh --version
           gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
-#          gh pr merge --merge --subject "automated pr merge" --body " merging automated pr changes"
+          gh pr merge --merge --subject "automated pr merge" --body " merging automated pr changes"
 #          gh pr close --comment "update vss-extension-dev.json file"
 #          git branch -d automatic_version_update
 
