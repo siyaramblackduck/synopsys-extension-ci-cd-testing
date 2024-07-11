@@ -76,14 +76,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           echo "updating version"
-          git config user.name 'github-action[bot]'
+          echo  "$(git log -n 1 --pretty=format:%an)"
+          echo  "$(git log -n 1 --pretty=format:%ae)"
+          echo "a"
+          echo "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          echo "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
+          
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          echo user.name
-          echo user.email
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
-          git push
+#          git push
 
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
