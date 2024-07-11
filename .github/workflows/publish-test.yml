@@ -90,8 +90,8 @@ jobs:
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
           git push origin main
-          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
-          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
+#          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
+#          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
 
       # - name: Install dependencies
