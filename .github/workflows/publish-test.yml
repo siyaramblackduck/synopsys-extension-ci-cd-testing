@@ -90,6 +90,7 @@ jobs:
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
 
+
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
 
