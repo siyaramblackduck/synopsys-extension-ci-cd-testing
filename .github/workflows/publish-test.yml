@@ -32,10 +32,6 @@ jobs:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORG_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
-          MAJOR: 1
-          MINOR: 0
-          PATCH: $[counter($MINOR, 0)]
-          VERSION: $MAJOR.$MINOR.$PATCH
           commit_message: ${{ github.event.head_commit.message }}
         run: |
           name="Synopsys-security-scan"
