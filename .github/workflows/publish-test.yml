@@ -83,7 +83,7 @@ jobs:
           echo user.email
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
-          
+          git push
 
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
