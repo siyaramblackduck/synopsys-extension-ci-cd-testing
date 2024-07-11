@@ -40,7 +40,7 @@ jobs:
         run: |
           name="Synopsys-security-scan"
           echo $name
-          echo "EXTENSION_NAME=$name" >> build.env
+          echo "EXTENSION_NAME=$name" 
           vss_extension_dev=$(cat vss-extension-dev.json)
           azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo $azure_extension_version
@@ -68,7 +68,7 @@ jobs:
           echo $version
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           cat vss-extension-dev.json
-          echo "AZURE_EXTENSION_VERSION=$azure_extension_version" >> build.env
+          echo "AZURE_EXTENSION_VERSION=$azure_extension_version"
 #          npm i -g tfx-cli
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 #        with:
