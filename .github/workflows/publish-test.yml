@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - main
-    branches-ignore:
-      - automatic_version_update
     paths-ignore:
       - '**.md'
   pull_request:
     branches:
       - main
+    branches-ignore:
+      - automatic_version_update
     paths-ignore:
       - '**.md'
   workflow_dispatch:
