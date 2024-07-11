@@ -15,6 +15,7 @@ on:
 
 jobs:
   publish-test:
+    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +82,8 @@ jobs:
           echo user.name
           echo user.email
           git add vss-extension-dev.json
-          git commit -m "update extension version"
+          git commit -m "update extension version [skip ci]"
+          
 
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
