@@ -83,8 +83,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           echo "updating version"
-          echo config --local user.name "$(git log -n 1 --pretty=format:%an)"
-          echo config --local user.email "$(git log -n 1 --pretty=format:%ae)"    
+          echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
+          echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"    
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
           git push origin main
