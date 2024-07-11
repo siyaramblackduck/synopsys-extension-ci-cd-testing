@@ -47,18 +47,18 @@ jobs:
           major=$(echo $azure_extension_version | awk -F. '{print $1}')
           minor=$(echo $azure_extension_version | awk -F. '{print $2}')
           patch=$(echo $azure_extension_version | awk -F. '{print $3}')
-          echo $commit_message
           COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
-          echo $(echo "$COMMIT_MESSAGE_HEADER" | awk -F: '{print $1}') 
+          COMMIT_MESSAGE=echo $(echo "$COMMIT_MESSAGE_HEADER" | awk -F: '{print $1}') 
           commit=$(echo "$commit_message" | awk -F: '{print $1}') 
-          echo $commit
-          if [[ "$commit" == "BREAKING CHANGE" ]]; then
+          echo $COMMIT_MESSAGE
+          echo "commit" $commit
+          if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
              version=$((major+1)).0.0
              echo "updated major version"
-          elif [[ "$commit" == "feat" ]]; then
+          elif [[ "$COMMIT_MESSAGE" == "feat" ]]; then
              version=$major.$((minor+1)).0
              echo "updated minor version"
-          elif [[ "$commit" == "fix" ]]; then
+          elif [[ "$COMMIT_MESSAGE" == "fix" ]]; then
              version=$major.$minor.$((patch+1))
              echo "updated patch version"
           else
