@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "QAtest",
   "name": "extensionTest",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "TestCIPub",
   "public": false,
   "targets": [
