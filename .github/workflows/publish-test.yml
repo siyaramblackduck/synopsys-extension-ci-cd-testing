@@ -71,12 +71,18 @@ jobs:
 
       - name: update extension version
         if: steps.publish-extension.conclusion == 'success'
-        run: |
-          echo "updating version"
-          git add vss-extension-dev.json
-          git commit -m "update extension version"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        run: |
+          echo "updating version"
+          git config user.name 'github-action[bot]'
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          echo user.name
+          echo user.email
+          git add vss-extension-dev.json
+          git commit -m "update extension version"
+
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
 
