@@ -9,8 +9,6 @@ on:
   pull_request:
     branches:
       - main
-    branches-ignore:
-      - automatic_version_update
     paths-ignore:
       - '**.md'
   workflow_dispatch:
@@ -91,13 +89,12 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b automatic_version_update
           git add vss-extension-dev.json
-          git commit -m "update extension version [skip ci]"
+          git commit -m "update extension version"
           git push origin automatic_version_update
           echo gh --version
           gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
           gh pr merge --merge --subject "automated pr merge" --body " merging automated pr changes"
-#          gh pr close --comment "update vss-extension-dev.json file"
-#          git branch -d automatic_version_update
+          git branch -d automatic_version_update
 
       # - name: Install dependencies
       #   run: cd synopsys-task && npm ci
