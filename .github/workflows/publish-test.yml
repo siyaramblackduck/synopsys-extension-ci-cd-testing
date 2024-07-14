@@ -73,6 +73,7 @@ jobs:
             echo " no version update"
           fi
           echo "AZURE_EXTENSION_VERSION=$version"
+          echo "::set-output name=azure_extension_version::$version"
 #          npm i -g tfx-cli
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 #        with:
@@ -87,8 +88,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           echo "updating version"
-          echo $env.AZURE_EXTENSION_VERSION
-          echo $steps.publish-extension.outputs.azure_extension_version
+          echo $env.CURRENT_VERSION
+          echo $env.NEW_VERSION 
           echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"  
           git config --local user.name "github-actions[bot]"
