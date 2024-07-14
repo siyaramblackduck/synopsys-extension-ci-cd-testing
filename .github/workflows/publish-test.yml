@@ -40,6 +40,7 @@ jobs:
           vss_extension_dev=$(cat vss-extension-dev.json)
           azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo $azure_extension_version
+          echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV
           major=$(echo $azure_extension_version | awk -F. '{print $1}')
           minor=$(echo $azure_extension_version | awk -F. '{print $2}')
           patch=$(echo $azure_extension_version | awk -F. '{print $3}')
@@ -67,6 +68,9 @@ jobs:
           cat vss-extension-dev.json
           if [[ azure_extension_version != version ]]; then
             echo "extension version updated" $azure_extension_version
+            npm i -g tfx-cli
+            tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}  
+            echo "NEW_VERSION=$version" >> $GITHUB_ENV
           else
             echo " no version update"
           fi
@@ -79,7 +83,8 @@ jobs:
 #               "*.vsix"
 
       - name: update extension version
-        if: steps.publish-extension.conclusion == 'success' &&  env.AZURE_EXTENSION_VERSION != ${{ steps.publish-extension.outputs.azure_extension_version }}
+        id: update-extension-version
+        if: steps.publish-extension.conclusion == 'success' && ${{ env.NEW_VERSION != env.CURRENT_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
