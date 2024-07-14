@@ -88,8 +88,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           echo "updating version"
-          echo $env.CURRENT_VERSION
-          echo $env.NEW_VERSION 
+          echo ${{ env.CURRENT_VERSION }}
+          echo ${{ env.NEW_VERSION }}
           echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"  
           git config --local user.name "github-actions[bot]"
