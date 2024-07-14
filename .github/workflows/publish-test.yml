@@ -67,7 +67,7 @@ jobs:
             tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}   
             echo "Successful published extension..."  
           else
-            echo " no version update"
+            echo "No extension version update"
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
           cat vss-extension-dev.json
