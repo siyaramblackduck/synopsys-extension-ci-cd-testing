@@ -79,7 +79,6 @@ jobs:
 #            path:
 #               "*.vsix"
 
-
       - name: update extension version
         id: update-extension-version
         if: ${{ env.NEW_VERSION != env.CURRENT_VERSION }}
