@@ -79,7 +79,6 @@ jobs:
 #            path:
 #               "*.vsix"
 
-
       - name: update extension version
         if: steps.publish-extension.conclusion == 'success'
         env:
