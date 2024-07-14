@@ -84,7 +84,7 @@ jobs:
 
       - name: update extension version
         id: update-extension-version
-        if: ${{ env.NEW_VERSION != env.CURRENT_VERSION }}
+        if: ${{ env.NEW_VERSION != env.CURRENT_VERSION }} && steps.publish-extension.conclusion == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
