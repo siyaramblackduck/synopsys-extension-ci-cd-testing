@@ -63,6 +63,7 @@ jobs:
             version=$azure_extension_version
           fi
           
+          
           if [[ "$azure_extension_version" != "$version" ]]; then
             jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
             echo "Extension version has changed from $azure_extension_version to $version"
