@@ -66,10 +66,8 @@ jobs:
           echo $azure_extension_version
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           cat vss-extension-dev.json
-          if [[ $azure_extension_version != $version ]]; then
+          if [[ "$azure_extension_version" != "$version" ]]; then
             echo "extension version updated" $azure_extension_version
-#            npm i -g tfx-cli
-#            tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           else
             echo " no version update"
