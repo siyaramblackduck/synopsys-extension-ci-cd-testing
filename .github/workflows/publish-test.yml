@@ -79,7 +79,7 @@ jobs:
 #               "*.vsix"
 
       - name: update extension version
-        if: steps.publish-extension.conclusion == 'success' && azure_extension_version != version
+        if: steps.publish-extension.conclusion == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
