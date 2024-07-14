@@ -71,6 +71,7 @@ jobs:
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           else
             echo " no version update"
+            echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
           echo "AZURE_EXTENSION_VERSION=$version"
           echo "::set-output name=azure_extension_version::$version"
