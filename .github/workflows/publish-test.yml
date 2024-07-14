@@ -102,31 +102,7 @@ jobs:
           name: extension-artifact
           path: vss-extension-dev.json
 
-      #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
+#          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
 
-
-      # - name: Install dependencies
-      #   run: cd synopsys-task && npm ci
-
-      # - name: Unit Test Cases
-      #   id: unit-test-cases
-      #   shell: bash
-      #   run: |
-      #     cd synopsys-task && npm run test
-      #     coverageFile="coverage/index.html"
-
-      #     ### fetching line coverage from coverage/index.html file
-      #     coverageSpan=$(grep -B 1 '<span class="quiet">Lines</span>' $coverageFile | head -n 1)
-      #     coverageHtml=$(echo "$coverageSpan" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-      #     coverageInPercent=$(echo $coverageHtml | sed -n 's/.*<span class="strong">\([0-9.]*%\).*/\1/p' | tr -d ' ')
-      #     echo "Line Coverage: $coverageInPercent"
-
-      #     ### remove percentage sign from coverageInPercent and convert to a floatin-point number 
-      #     coverageValue=$(echo "$coverageInPercent" | tr -d '%' | sed 's/,/./g')
-      #     ### check if the coverage is below 90%
-      #     if [[ $coverageValue < 90 ]]; then
-      #         echo "##[error]Line coverage is below 90%"
-      #         exit 1
-      #     fi
