@@ -67,10 +67,10 @@ jobs:
           cat vss-extension-dev.json
           if [[ azure_extension_version != version ]]; then
             echo "extension version updated" $azure_extension_version
-            return 0;
+            return 0
           else
             echo " no version update"
-            return 1;
+            return 1
           fi
           echo "AZURE_EXTENSION_VERSION=$version"
 #          npm i -g tfx-cli
