@@ -45,7 +45,7 @@ jobs:
           patch=$(echo $azure_extension_version | awk -F. '{print $3}')
           COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
           COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | awk -F: '{print $1}') 
-          echo $COMMIT_MESSAGE_HEADER
+          echo "commit message: " $COMMIT_MESSAGE_HEADER
           if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
              version=$((major+1)).0.0
              echo "updating extension version $azure_extension_version to $version"
