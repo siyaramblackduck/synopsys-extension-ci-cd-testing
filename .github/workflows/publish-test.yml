@@ -104,7 +104,6 @@ jobs:
 
       - name: Node.js 20.x
         run: |
-           npm i
            echo npm -v
 
       #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
