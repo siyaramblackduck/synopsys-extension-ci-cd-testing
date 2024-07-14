@@ -62,12 +62,11 @@ jobs:
                  
           if [[ "$azure_extension_version" != "$version" ]]; then
             jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
-            echo "Extension version has changed from $azure_extension_version to $version"
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
             echo "Publishing extension with latest version: $version"
             npm i -g tfx-cli
             tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}   
-            echo "Successful published extension..."        
+            echo "Successful published extension..."  
           else
             echo " no version update"
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
@@ -98,9 +97,9 @@ jobs:
           echo "Successful updated version in vss-extension-dev.json..."
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: vss-extension-dev
+          name: extension-artifact
           path: vss-extension-dev.json
 
       #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
