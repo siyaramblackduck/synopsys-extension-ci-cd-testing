@@ -67,14 +67,16 @@ jobs:
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           cat vss-extension-dev.json
           if [[ "$azure_extension_version" != "$version" ]]; then
-            echo "extension version updated" $azure_extension_version
+            echo "Extension version has changed from $azure_extension_version to $version"
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
+            echo "Publishing extension with latest version: $version"
+            echo "Successful published extension..."
+             
           else
             echo " no version update"
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
           echo "AZURE_EXTENSION_VERSION=$version"
-          echo "::set-output name=azure_extension_version::$version"
 #          npm i -g tfx-cli
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 #        with:
@@ -88,7 +90,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-          echo "updating version"
+          echo "Updating version in vss-extension-dev.json..."
           echo ${{ env.CURRENT_VERSION }}
           echo ${{ env.NEW_VERSION }}
           echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
@@ -98,6 +100,7 @@ jobs:
           git add vss-extension-dev.json
           git commit -m "update extension version [skip ci]"
           git push origin main
+          echo "Successful updated version in vss-extension-dev.json..."
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
