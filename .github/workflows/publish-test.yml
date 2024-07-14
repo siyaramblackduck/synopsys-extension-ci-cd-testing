@@ -51,20 +51,27 @@ jobs:
           echo "commit" $commit
           if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
              version=$((major+1)).0.0
-             echo "updated major version"
+             echo "updating extension version"
           elif [[ "$COMMIT_MESSAGE" == "feat" ]]; then
              version=$major.$((minor+1)).0
-             echo "updated minor version"
+             echo "updating extension version"
           elif [[ "$COMMIT_MESSAGE" == "fix" ]]; then
              version=$major.$minor.$((patch+1))
-             echo "updated patch version"
+             echo "updating extension version"
           else
             version=$azure_extension_version
           fi
-          echo $version
+          echo $version 
+          echo $azure_extension_version
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           cat vss-extension-dev.json
           echo "AZURE_EXTENSION_VERSION=$version"
+          if [[ azure_extension_version != version ]]; then
+            echo "extension version updated" $azure_extension_version
+            return 0;
+          else
+            echo " no version update"
+            return 1;
 #          npm i -g tfx-cli
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 #        with:
