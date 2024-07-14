@@ -35,11 +35,10 @@ jobs:
           commit_message: ${{ github.event.head_commit.message }}
         run: |
           name="Synopsys-security-scan"
-          echo $name
           echo "EXTENSION_NAME=$name" 
           vss_extension_dev=$(cat vss-extension-dev.json)
           azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
-          echo $azure_extension_version
+          echo "current version: " $azure_extension_version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV
           major=$(echo $azure_extension_version | awk -F. '{print $1}')
           minor=$(echo $azure_extension_version | awk -F. '{print $2}')
@@ -49,13 +48,13 @@ jobs:
           echo $COMMIT_MESSAGE_HEADER
           if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
              version=$((major+1)).0.0
-             echo "updating extension version"
+             echo "updating extension version $azure_extension_version to $version"
           elif [[ "$COMMIT_MESSAGE" == "feat" ]]; then
              version=$major.$((minor+1)).0
-             echo "updating extension version"
+             echo "updating extension version $azure_extension_version to $version"
           elif [[ "$COMMIT_MESSAGE" == "fix" ]]; then
              version=$major.$minor.$((patch+1))
-             echo "updating extension version"
+             echo "updating extension version $azure_extension_version to $version"
           else
             version=$azure_extension_version
           fi
