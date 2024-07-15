@@ -50,7 +50,6 @@ jobs:
              echo "auto patch version updated to " $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
              sed -i "s/extension_version=$previous_extension_version/extension_version=$version/" extension_version.txt
-             cat extension_version.txt 
           else
              echo "No auto version update"
              version=$current_extension_version
@@ -79,7 +78,8 @@ jobs:
             echo "Successful published extension with latest version:$updated_version "
           else
             echo "No extension version update"
-          fi   
+          fi 
+          cat extension_version.txt 
 
 #      - name: publish-extension
 #        id: publish-extension
