@@ -36,6 +36,7 @@ jobs:
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "current version: " $extension_version
           echo "CURRENT_VERSION=$extension_version" >> $GITHUB_ENV
+          echo $env.CURRENT_VERSION 
           if [[ ${{ env.PREVIOUS_VERSION == '' }} ]]; then
             echo "extension version:" ${{ env.CURRENT_VERSION }}
             echo "version:" $env.CURRENT_VERSION
