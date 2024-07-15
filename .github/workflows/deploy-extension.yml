@@ -22,12 +22,6 @@ jobs:
           echo "extension_name" $extension_name
           echo "extension_publisher" $extension_publisher
           echo "current version: " $extension_version
-          if [[ "$COMMIT_MESSAGE" == "fix" ]]; then
-             version=$major.$minor.$((patch+1))
-             echo "updating extension version $azure_extension_version to $version"
-          else
-            version=$azure_extension_version
-          fi
           cat vss-extension.json
           echo "Deploying $extension_name extension on $extension_publisher publisher  with latest-version: $extension_version"  
           echo "Successful Deployed $extension_name extension on $extension_publisher publisher  with latest-version: $extension_version"  
