@@ -49,14 +49,14 @@ jobs:
              version=$current_major.$current_minor.$((current_patch+1)) 
              echo "auto patch version updated to " $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
-             sed -i "s/extension_version=$previous_extension_version/extension_version=$version/" extension_version.txt
           else
              echo "No auto version update"
              version=$current_extension_version
              echo "version" $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
           fi 
-          echo "extension_version.txt file" cat extension_version.txt 
+          echo "extension_version.txt file"
+          cat extension_version.txt 
           echo "latest_version" $version
 
       - name: publish-extension
@@ -74,12 +74,11 @@ jobs:
           updated_version=${{ env.NEW_VERSION }}
           echo "updated version:" $updated_version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV  
-          if ${{ env.NEW_VERSION != env.CURRENT_VERSION }}; then
-            echo "Publishing extension with latest version: $updated_version"
-            echo "Successful published extension with latest version:$updated_version "
-          else
-            echo "No extension version update"
-          fi 
+          jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
+          sed -i "s/extension_version=.*/extension_version=$version/" extension_version.txt
+          echo "Publishing extension with latest version: $updated_version"
+          echo "Successful published extension with latest version:$updated_version "
+       
 
 #      - name: publish-extension
 #        id: publish-extension
