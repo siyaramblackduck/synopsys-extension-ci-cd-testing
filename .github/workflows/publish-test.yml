@@ -34,6 +34,7 @@ jobs:
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
+          echo "NEW_VERSION=$azure_extension_version" >> $GITHUB_ENV  
           echo "current version: " $current_extension_version
           previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
           echo  "previous_version:" $previous_extension_version
@@ -47,12 +48,10 @@ jobs:
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
              version=$current_extension_version  
              echo "patch version updated" $version
-             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           else
              echo "no version update"
              version=$current_extension_version
              echo "version" $version
-             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
           if [[ "$version" == "$previous_extension_version" ]]; then
              echo "same version"
