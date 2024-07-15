@@ -46,42 +46,38 @@ jobs:
           echo "previous:" $previous_major.$previous_minor
           echo "current:" $current_major.$current_minor.$current_patch
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
-             version=$current_major.$current_minor.$((current_patch+1)) 
-             echo "auto patch version updated to " $version
-             echo "NEW_VERSION=$version" >> $GITHUB_ENV 
+             new_version=$current_major.$current_minor.$((current_patch+1)) 
+             echo "auto patch version updated to " $new_version
+             echo "NEW_VERSION=$version" >> $GITHUB_ENV    
+             jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
+             echo "vss-extension-dev.json file"
+             cat vss-extension-dev.json
+             sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
+             echo "extension_version.txt file"
+             cat extension_version.txt
           else
              echo "No auto version update"
              version=$current_extension_version
-             echo "version" $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
           fi  
-          echo "latest_version" $version
 
       - name: publish-extension
         id: publish-extension
         env:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
-          ORG_NAME: ${{ secrets.ORG_NAME }}
+          ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
-          name="Synopsys-security-scan"
-          echo "EXTENSION_NAME=$name"
-          vss_extension_dev=$(cat vss-extension-dev.json)
-          azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
-          echo "current version: " $azure_extension_version
-          new_version=${{ env.NEW_VERSION }}
-          echo "updated version:" $new_version
-          echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV  
-          jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
-          echo "vss-extension-dev.json file"
-          cat vss-extension-dev.json
-          sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
-          echo "extension_version.txt file"
-          cat extension_version.txt
-          echo
-          echo "Publishing extension with latest version: $new_version"
-          echo "Successful published extension with latest version: $new_version "
-       
+           vss_extension_dev=$(cat vss-extension-dev.json)
+           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
+           echo "Extension-name: " $extension_name
+           extension_version=$(echo $vss_extension_dev | jq -r '.version')
+           echo "Extension-version: " $extension_version
+           echo "Publishing extension with latest version: $extension_version"
+           echo "Successful published extension with latest version: $extension_version "
+
+#  npm i -g tfx-cli
+#  tfx extension publish --publisher ${PUBLISHER_NAME}  --manifest-globs vss-extension-dev.json --share-with ${ORGANIZATION_NAME}  --token ${USER_TOKEN}
 
 #      - name: publish-extension
 #        id: publish-extension
@@ -131,33 +127,30 @@ jobs:
 #          echo "AZURE_EXTENSION_VERSION=$version"
 ##          npm i -g tfx-cli
 ##          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
-##        with:
-##            name: publish-extension
-##            path:
-##               "*.vsix"
+
+
+#      - name: update extension version
+#        id: update-extension-version
+#        if: ${{ env.NEW_VERSION != env.CURRENT_VERSION }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+#        run: |
+#          echo "Updating version in vss-extension-dev.json..."
+#          echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
+#          echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+#          git add vss-extension-dev.json extension_version.txt
+#          git commit -m "update extension version [skip ci]"
+#          git push origin main
+#          echo "Successful updated version in vss-extension-dev.json..."
 #
-      - name: update extension version
-        id: update-extension-version
-        if: ${{ env.NEW_VERSION != env.CURRENT_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-        run: |
-          echo "Updating version in vss-extension-dev.json..."
-          echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
-          echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add vss-extension-dev.json extension_version.txt
-          git commit -m "update extension version [skip ci]"
-          git push origin main
-          echo "Successful updated version in vss-extension-dev.json..."
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: extension-artifact
-          path: vss-extension-dev.json
-
+#      - name: Upload Artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: extension-artifact
+#          path: vss-extension-dev.json
+#
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
