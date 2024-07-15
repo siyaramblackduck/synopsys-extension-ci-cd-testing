@@ -67,7 +67,7 @@ jobs:
           vss_extension_dev=$(cat vss-extension-dev.json)
           azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "current version: " $azure_extension_version
-          version=$env.CURRENT_VERSION
+          version=$CURRENT_VERSION
           echo "latest version:" $version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV   
           if [[ "$azure_extension_version" != "$env.CURRENT_VERSION" ]]; then
