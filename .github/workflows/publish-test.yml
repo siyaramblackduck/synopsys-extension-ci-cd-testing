@@ -51,37 +51,12 @@ jobs:
              echo "no version update"
              version=$current_extension_version
           fi
-          echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV
-          echo "NEW_VERSION=$version" >> $GITHUB_ENV
           if [[ "$version" == "$previous_extension_version" ]]; then
              echo "same version"
           else
             echo "version changed"
           fi
-          if [[ $env.NEW_VERSION == $env.CURRENT_VERSION ]]; then
-            echo "Publishing extension with latest version: $version"
-            echo "Successful published extension with latest version: $version "
-          else
-            echo "No extension version update"
-          fi 
-          if [[ "$env.NEW_VERSION"  -eq "$env.CURRENT_VERSION" ]]; then
-            echo "Publishing extension with latest version: $version"
-            echo "Successful published extension with latest version: $version "
-          else
-            echo "No extension version update"
-          fi
-          if [[ $env.NEW_VERSION -eq $env.CURRENT_VERSION ]]; then
-            echo "Publishing extension with latest version: $version"
-            echo "Successful published extension with latest version: $version "
-          else
-            echo "No extension version update"
-          fi
-#          if [[ ${{ env.NEW_VERSION -eq env.CURRENT_VERSION }} ]]; then
-#            echo "Publishing extension with latest version: $version"
-#            echo "Successful published extension with latest version: $version "
-#          else
-#            echo "No extension version update"
-#          fi
+
 #          echo "latest_version" $version
 
       - name: publish-extension
