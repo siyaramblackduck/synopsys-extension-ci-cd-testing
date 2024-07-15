@@ -39,9 +39,8 @@ jobs:
           echo $env.CURRENT_VERSION
           echo $CURRENT_VERSION
           echo ${{ env.CURRENT_VERSION }}
-          if [[ -z "${{ env.PREVIOUS_VERSION }}" ]]; then
-            echo "extension version:" ${{ env.CURRENT_VERSION }}
-            echo "version:" $env.CURRENT_VERSION
+          if grep -q "PREVIOUS_VERSION=" $GITHUB_ENV; then
+            echo "previous version:" 
           else
            echo "no previous present"
           fi
