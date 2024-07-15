@@ -53,6 +53,11 @@ jobs:
              version=$current_extension_version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
+          if [[ "$version" == "$current_version" ]]; then
+             echo "same version"
+          else
+            echo "version changed"
+          fi
           echo "latest_version" $version 
 
       - name: publish-extension
