@@ -54,9 +54,7 @@ jobs:
              version=$current_extension_version
              echo "version" $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
-          fi 
-          echo "extension_version.txt file"
-          cat extension_version.txt 
+          fi  
           echo "latest_version" $version
 
       - name: publish-extension
@@ -75,7 +73,11 @@ jobs:
           echo "updated version:" $updated_version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV  
           jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
+          echo "vss-extension-dev.json file"
+          cat vss-extension-dev.json
           sed -i "s/extension_version=.*/extension_version=$version/" extension_version.txt
+          echo "extension_version.txt file"
+          cat extension_version.txt
           echo "Publishing extension with latest version: $updated_version"
           echo "Successful published extension with latest version:$updated_version "
        
