@@ -34,7 +34,6 @@ jobs:
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
-          echo "NEW_VERSION=$current_extension_version" >> $GITHUB_ENV  
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "current version: " $current_extension_version
           previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
@@ -54,13 +53,8 @@ jobs:
              version=$current_extension_version
              echo "version" $version
           fi
-          if [[ "$version" == "$previous_extension_version" ]]; then
-             echo "same version"
-          else
-            echo "version changed"
-          fi
-
-#          echo "latest_version" $version
+          echo "NEW_VERSION=$version" >> $GITHUB_ENV  
+          echo "latest_version" $version
 
       - name: publish-extension
         id: publish-extension
