@@ -138,28 +138,28 @@ jobs:
 ##          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
 
 
-#      - name: update extension version
-#        id: update-extension-version
-#        if: ${{  steps.publish-extension.conclusion == 'success' && env.NEW_VERSION != env.CURRENT_VERSION }}
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-#        run: |
-#          echo "Updating version in vss-extension-dev.json..."
-#          echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
-#          echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-#          git config --local user.name "github-actions[bot]"
-#          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-#          git add vss-extension-dev.json extension_version.txt
-#          git commit -m "update extension version [skip ci]"
-#          git push origin main
-#          echo "Successful updated version in vss-extension-dev.json..."
+      - name: update extension version
+        id: update-extension-version
+        if: ${{  steps.publish-extension.conclusion == 'success' && env.NEW_VERSION != env.CURRENT_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        run: |
+          echo "Updating version in vss-extension-dev.json..."
+          echo git config --local user.name "$(git log -n 1 --pretty=format:%an)"
+          echo git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add vss-extension-dev.json extension_version.txt
+          git commit -m "update extension version [skip ci]"
+          git push origin main
+          echo "Successful updated version in vss-extension-dev.json..."
 
-#      - name: Upload Artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: extension-artifact
-#          path: vss-extension-dev.json
-#
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-artifact
+          path: vss-extension-dev.json
+
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
