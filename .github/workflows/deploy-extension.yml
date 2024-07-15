@@ -17,8 +17,8 @@ jobs:
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
           vss_extension_dev=$(cat vss-extension-dev.json)
-          extension_name=$(echo $vss_extension | jq ".name = \"$name\"")
-          extension_publisher=$(echo $vss_extension | jq ".publisher = \"$PUBLISHER_ID\"")  
+          extension_name=$(echo $vss_extension | jq -r ".name = \"$name\"")
+          extension_publisher=$(echo $vss_extension | jq -r ".publisher = \"$PUBLISHER_ID\"")  
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "extension_name" $extension_name
           echo "extension_publisher" $extension_publisher
