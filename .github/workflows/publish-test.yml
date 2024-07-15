@@ -48,12 +48,13 @@ jobs:
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
              version=$current_major.$current_minor.$((current_patch+1)) 
              echo "patch version updated" $version
+             echo "NEW_VERSION=$version" >> $GITHUB_ENV 
           else
              echo "no version update"
              version=$current_extension_version
              echo "version" $version
-          fi
-          echo "NEW_VERSION=$version" >> $GITHUB_ENV  
+             echo "NEW_VERSION=$version" >> $GITHUB_ENV 
+          fi 
           echo "latest_version" $version
 
       - name: publish-extension
