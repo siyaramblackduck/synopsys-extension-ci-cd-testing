@@ -66,7 +66,6 @@ jobs:
         env:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
-          USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
