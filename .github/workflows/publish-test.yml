@@ -78,7 +78,7 @@ jobs:
           sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
           echo "extension_version.txt file"
           cat extension_version.txt
-          
+          echo
           echo "Publishing extension with latest version: $new_version"
           echo "Successful published extension with latest version: $new_version "
        
