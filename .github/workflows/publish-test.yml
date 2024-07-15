@@ -45,10 +45,11 @@ jobs:
           echo "previous" $previous_major $previous_minor
           echo "current" $current_major $current_minor $current_patch
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
-             version=$current_major.$current_minor.$((patch+1))
+             version=$current_major.$current_minor.$((current_patch+1))
              echo "patch version updated" $version
           else
              echo "no version update"
+             version=$current_extension_version
           fi
 
       - name: publish-extension
