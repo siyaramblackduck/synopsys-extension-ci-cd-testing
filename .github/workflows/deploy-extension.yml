@@ -12,7 +12,6 @@ jobs:
       - name: deploy-extension
         id: deploy-extension
         env:
-          PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORG_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
