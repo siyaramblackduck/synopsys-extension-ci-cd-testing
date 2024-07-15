@@ -75,6 +75,7 @@ jobs:
           echo "Installing tfx-cli..."
           npm i -g tfx-cli
           echo "Publishing extension $extension_name with version $extension_version"
+          exit 1
 #          tfx extension publish --publisher abcd  --manifest-globs vss-extension-dev.json --token aaa 2>&1 | tee tfx_output.log
 #          publish_exit_code=${PIPESTATUS[0]}
 #          if [ $publish_exit_code -eq 0 ]; then
