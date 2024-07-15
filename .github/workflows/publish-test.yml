@@ -64,13 +64,19 @@ jobs:
           else
             echo "No extension version update"
           fi 
-          if [[ "$env.NEW_VERSION" == "$env.CURRENT_VERSION" ]]; then
+          if [[ "$env.NEW_VERSION"  -eq "$env.CURRENT_VERSION" ]]; then
             echo "Publishing extension with latest version: $version"
             echo "Successful published extension with latest version: $version "
           else
             echo "No extension version update"
           fi
-          if [[ $env.NEW_VERSION == $env.CURRENT_VERSION ]]; then
+          if [[ $env.NEW_VERSION -eq $env.CURRENT_VERSION ]]; then
+            echo "Publishing extension with latest version: $version"
+            echo "Successful published extension with latest version: $version "
+          else
+            echo "No extension version update"
+          fi
+          if [[ ${{ env.NEW_VERSION -eq env.CURRENT_VERSION }} ]]; then
             echo "Publishing extension with latest version: $version"
             echo "Successful published extension with latest version: $version "
           else
