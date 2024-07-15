@@ -35,7 +35,7 @@ jobs:
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "current version: " $extension_version
-          previous=$(echo $extension_version.txt | jq -r '.extension_version')
+          previous=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
           a=$(echo $extension_version.txt | jq -r 'extension_version')
           b=$(echo $extension_version.txt | jq -r 'extension_version=')
           echo $previous "p"
