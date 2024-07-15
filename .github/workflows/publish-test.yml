@@ -53,6 +53,7 @@ jobs:
              version=$current_extension_version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
+          echo $version " pre " $current_version 
           if [[ "$version" == "$current_version" ]]; then
              echo "same version"
           else
