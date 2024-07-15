@@ -1,4 +1,4 @@
-name: publish-test
+name: deploy-extension-test
 
 on:
   workflow_dispatch:
