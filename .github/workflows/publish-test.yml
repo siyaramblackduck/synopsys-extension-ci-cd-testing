@@ -35,12 +35,14 @@ jobs:
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "current version: " $extension_version
-          previous=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
-          a=$(echo $extension_version.txt | jq -r 'extension_version')
-          b=$(echo $extension_version.txt | jq -r 'extension_version=')
-          echo $previous "p"
-          echo $a "a"
-          echo $b "b"
+          previous_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
+          echo $previous_version
+          
+          if[[ "$previous_version" == "$extension_version" ]]; then
+            echo "same version"
+          else
+            echo "version changed"
+          fi
           
       
 
