@@ -71,7 +71,6 @@ jobs:
           echo "latest version:" $version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV   
           if ${{ env.NEW_VERSION != env.CURRENT_VERSION }}; then
-            jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
             echo "Publishing extension with latest version: $version"
             echo "Successful published extension with latest version: $version "
