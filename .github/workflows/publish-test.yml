@@ -49,7 +49,7 @@ jobs:
              version=$current_major.$current_minor.$((current_patch+1)) 
              echo "auto patch version updated to " $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
-             echo "extension_version=$version" >> extension_version.txt
+             sed -i "s/extension_version=$previous_extension_version/extension_version=$version/" extension_version.txt
              cat extension_version.txt 
           else
              echo "No auto version update"
