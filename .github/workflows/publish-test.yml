@@ -65,7 +65,7 @@ jobs:
             echo "Publishing extension with latest version: $version"
             npm i -g tfx-cli
             tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}   
-            echo "Successful published extension..."  
+            echo "Successful published extension with latest version: $version "  
           else
             echo "No extension version update"
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
