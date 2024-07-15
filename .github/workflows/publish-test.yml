@@ -33,19 +33,46 @@ jobs:
         run: |
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
-          previous_version=$(echo $vss_extension_dev | jq -r '.version')
-          echo "current version: " $extension_version
-          previous_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
-          echo  "previous_version:" $previous_version
-          if [[ "$previous_version" == "$previous_version" ]]; then
-            echo "same version"
+          current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
+          echo "current version: " $current_extension_version
+          previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
+          echo  "previous_version:" $previous_extension_version
+          previous_major=$(echo $previous_extension_version | awk -F. '{print $1}')
+          previous_minor=$(echo $previous_extension_version | awk -F. '{print $2}')
+          current_major=$(echo $current_extension_version | awk -F. '{print $1}')
+          current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
+          current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
+          echo "previous" $previous_major $previous_minor
+          echo "current" $current_major $current_minor
+          if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
+             version=$current_major.$current_minor.$((patch+1))
+             echo "patch version updated" $version
           else
-            echo "version changed"
+             echo "no version update"
           fi
-          
-      
 
-
+      - name: publish-extension
+        id: publish-extension
+        env:
+          PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
+          ORG_NAME: ${{ secrets.ORG_NAME }}
+          USER_TOKEN: ${{ secrets.USER_TOKEN }}
+        run: |
+          name="Synopsys-security-scan"
+          echo "EXTENSION_NAME=$name"
+          vss_extension_dev=$(cat vss-extension-dev.json)
+          azure_extension_version=$(echo $vss_extension_dev | jq -r '.version')
+          echo "current version: " $azure_extension_version
+          echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV   
+          if [[ "$azure_extension_version" != "$version" ]]; then
+            jq --arg version "$version" '.version = $version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
+            echo "NEW_VERSION=$version" >> $GITHUB_ENV
+            echo "Publishing extension with latest version: $version"
+            echo "Successful published extension with latest version: $version "
+          else
+            echo "No extension version update"
+            echo "NEW_VERSION=$version" >> $GITHUB_ENV
+          fi   
 
 #      - name: publish-extension
 #        id: publish-extension
