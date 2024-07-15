@@ -76,7 +76,7 @@ jobs:
           version=${{ env.CURRENT_VERSION }}
           echo "latest version:" $version
           echo "CURRENT_VERSION=1" >> $GITHUB_ENV  
-          echo "NEW_VERSION=2" >> $GITHUB_ENV
+          echo "NEW_VERSION=1" >> $GITHUB_ENV
           if ${{ env.NEW_VERSION == env.CURRENT_VERSION }}; then
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
             echo "Publishing extension with latest version: $version"
