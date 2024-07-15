@@ -47,10 +47,12 @@ jobs:
           echo "current:" $current_major.$current_minor.$current_patch
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
              version=$current_major.$current_minor.$((current_patch+1)) 
-             echo "patch version updated" $version
+             echo "auto patch version updated to " $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
+             echo "extension_version=$version" >> extension_version.txt
+             cat extension_version.txt 
           else
-             echo "no version update"
+             echo "No auto version update"
              version=$current_extension_version
              echo "version" $version
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
