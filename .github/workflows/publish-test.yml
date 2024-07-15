@@ -34,10 +34,11 @@ jobs:
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
-          echo "current version: " $azure_extension_version
+          echo "current version: " $extension_version
           echo "CURRENT_VERSION=$extension_version" >> $GITHUB_ENV
           if [[ ${{ env.CURRENT_VERSION == '' }} ]]; then
-            echo "extension version:" $env.CURRENT_VERSION
+            echo "extension version:" ${{ env.CURRENT_VERSION }}
+            echo "version:" $env.CURRENT_VERSION
           else
            echo "no present"
           fi
