@@ -28,8 +28,9 @@ jobs:
 
       - name: version-update
         id: version-update
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
