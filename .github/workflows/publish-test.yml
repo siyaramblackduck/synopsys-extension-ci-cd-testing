@@ -68,20 +68,19 @@ jobs:
           ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
           USER_TOKEN: ${{ secrets.USER_TOKEN }}
         run: |
-           vss_extension_dev=$(cat vss-extension-dev.json)
-           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
-           echo "Extension Name: " $extension_name
-           extension_version=$(echo $vss_extension_dev | jq -r '.version')
-           echo "Extension Version: " $extension_version
-           echo "Installing tfx-cli..."
-           npm i -g tfx-cli
-           echo "Publishing extension $extension_name with version $extension_version"
-           tfx extension publish --publisher  --manifest-globs vss-extension-dev.json 
-           if [ $? -eq 0 ]; then
-              echo "Extension $extension_name version $extension_version published successfully!"
-           else
-              echo "Failed to publish the extension. Please check the logs for more details."
-          exit 1
+          vss_extension_dev=$(cat vss-extension-dev.json)
+          extension_name=$(echo $vss_extension_dev | jq -r '.name' )
+          echo "Extension Name: " $extension_name
+          extension_version=$(echo $vss_extension_dev | jq -r '.version')
+          echo "Extension Version: " $extension_version
+          echo "Installing tfx-cli..."
+          npm i -g tfx-cli
+          echo "Publishing extension $extension_name with version $extension_version"
+          tfx extension publish --publisher  --manifest-globs vss-extension-dev.json 
+          if [ $? -eq 0 ]; then
+             echo "Extension $extension_name version $extension_version published successfully!"
+          else
+            echo "Failed to publish the extension. Please check the logs for more details."
           fi
 
 #  npm i -g tfx-cli
