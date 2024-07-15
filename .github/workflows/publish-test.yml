@@ -75,8 +75,8 @@ jobs:
           echo "current version: " $azure_extension_version
           version=${{ env.CURRENT_VERSION }}
           echo "latest version:" $version
-          echo "CURRENT_VERSION=1" >> $GITHUB_ENV  
-          echo "NEW_VERSION=1" >> $GITHUB_ENV
+          echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV  
+          echo "NEW_VERSION=$azure_extension_version" >> $GITHUB_ENV
           if ${{ env.NEW_VERSION == env.CURRENT_VERSION }}; then
             echo "NEW_VERSION=$version" >> $GITHUB_ENV
             echo "Publishing extension with latest version: $version"
