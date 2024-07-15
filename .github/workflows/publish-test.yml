@@ -78,6 +78,7 @@ jobs:
           tfx_output=$(tfx extension publish --publisher abcd  --manifest-globs vss-extension-dev.json --token aaa)
           echo $tfx_output 
           publish_exit_code=$?
+          echo $publish_exit_code "code"
           if [ $publish_exit_code -eq 0 ]; then
              echo "Extension $extension_name version $extension_version published successfully!"
           else
