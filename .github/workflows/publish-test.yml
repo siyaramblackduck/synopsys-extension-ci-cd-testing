@@ -76,7 +76,7 @@ jobs:
           echo "Installing tfx-cli..."
           npm i -g tfx-cli
           echo "Publishing extension $extension_name with version $extension_version"
-          tfx extension publish --publisher  --manifest-globs vss-extension-dev.json 
+          tfx extension publish --publisher abcd  --manifest-globs vss-extension-dev.json --token aaa
           if [ $? -eq 0 ]; then
              echo "Extension $extension_name version $extension_version published successfully!"
           else
