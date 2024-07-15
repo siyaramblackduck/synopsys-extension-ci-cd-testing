@@ -47,9 +47,12 @@ jobs:
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
              version=$current_extension_version  
              echo "patch version updated" $version
+             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           else
              echo "no version update"
              version=$current_extension_version
+             echo "version" $version
+             echo "NEW_VERSION=$version" >> $GITHUB_ENV
           fi
           if [[ "$version" == "$previous_extension_version" ]]; then
              echo "same version"
@@ -74,7 +77,6 @@ jobs:
           version=${{ env.CURRENT_VERSION }}
           echo "latest version:" $version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV  
-          echo "NEW_VERSION=$azure_extension_version" >> $GITHUB_ENV
           if ${{ env.NEW_VERSION == env.CURRENT_VERSION }}; then
             echo "Publishing extension with latest version: $version"
             echo "Successful published extension with latest version: $version "
