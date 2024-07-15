@@ -42,6 +42,7 @@ jobs:
             echo "previous version:" 
           else
            echo "no previous present"
+           echo "CURRENT_VERSION=$extension_version" >> $GITHUB_ENV
           fi
 
 
