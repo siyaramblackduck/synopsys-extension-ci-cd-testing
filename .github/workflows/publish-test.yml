@@ -35,18 +35,18 @@ jobs:
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
-          echo "current version: " $current_extension_version
+          echo "current extension version: " $current_extension_version
           previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
-          echo  "previous_version:" $previous_extension_version
+          echo  "previous extension version:" $previous_extension_version
           previous_major=$(echo $previous_extension_version | awk -F. '{print $1}')
           previous_minor=$(echo $previous_extension_version | awk -F. '{print $2}')
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
           current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
           current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
-          echo "previous" $previous_major.$previous_minor
-          echo "current" $current_major.$current_minor.$current_patch
+          echo "previous:" $previous_major.$previous_minor
+          echo "current:" $current_major.$current_minor.$current_patch
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
-             version=$current_extension_version  
+             version=$current_major.$current_minor.$((current_patch+1)) 
              echo "patch version updated" $version
           else
              echo "no version update"
@@ -71,7 +71,7 @@ jobs:
           version=${{ env.CURRENT_VERSION }}
           echo "latest version:" $version
           echo "CURRENT_VERSION=$azure_extension_version" >> $GITHUB_ENV  
-          if ${{ env.NEW_VERSION == env.CURRENT_VERSION }}; then
+          if ${{ env.NEW_VERSION != env.CURRENT_VERSION }}; then
             echo "Publishing extension with latest version: $version"
             echo "Successful published extension with latest version: $version "
           else
