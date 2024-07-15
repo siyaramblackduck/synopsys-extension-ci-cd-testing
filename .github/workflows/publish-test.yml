@@ -52,7 +52,7 @@ jobs:
              version=$current_extension_version
           fi
           echo "latest_version" $version 
-          echo "::set-env name=version::$version"
+          echo "::set-output name=version::$version"
 
       - name: publish-extension
         id: publish-extension
