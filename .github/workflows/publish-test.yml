@@ -69,21 +69,18 @@ jobs:
         run: |
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
-          echo "Extension Name: " $extension_name
+          echo "Extension Name:" $extension_name
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
-          echo "Extension Version: " $extension_version
+          echo "Extension Version:" $extension_version
           echo "Installing tfx-cli..."
           npm i -g tfx-cli
           echo "Publishing extension $extension_name with version $extension_version"
           tfx extension publish --publisher abcd  --manifest-globs vss-extension-dev.json --token aaa 2>&1 | tee tfx_output.log
           publish_exit_code=${PIPESTATUS[0]}
-          echo $publish_exit_code "code"
           if [ $publish_exit_code -eq 0 ]; then
              echo "Extension $extension_name version $extension_version published successfully!"
           else
-            echo "Failed to publish the extension. Please check the logs for more details."
-            echo "Error details:"
-            cat tfx_output.log
+            echo "Failed to publish the extension $extension_name version $extension_version."
             exit 1
           fi
 
