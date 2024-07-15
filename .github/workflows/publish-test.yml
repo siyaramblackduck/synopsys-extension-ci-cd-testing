@@ -45,10 +45,10 @@ jobs:
            echo "no previous present"
           fi
           
-          if [[ -z "${{ env.CURRENT_VERSION }}" ]]; then
-            echo "version:" $env.CURRENT_VERSION
+          if grep -q "CURRENT_VERSION=" $GITHUB_ENV; then
+            echo "current version:" 
           else
-           echo " no current present"
+           echo "no previous present"
           fi
 
 #      - name: publish-extension
