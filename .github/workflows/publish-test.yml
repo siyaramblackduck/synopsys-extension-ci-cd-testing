@@ -35,6 +35,7 @@ jobs:
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "NEW_VERSION=$current_extension_version" >> $GITHUB_ENV  
+          echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "current version: " $current_extension_version
           previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
           echo  "previous_version:" $previous_extension_version
