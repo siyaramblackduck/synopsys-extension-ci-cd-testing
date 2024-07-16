@@ -60,17 +60,16 @@ jobs:
               echo "Extension version will not be updated. Current version: $new_version"
           fi
           
-          if [[ "$current_extension_version" != "$new_version" ]]; then
-             echo "NEW_VERSION=$version" >> $GITHUB_ENV    
+          if [[ "$current_extension_version" != "$new_version" ]]; then   
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
-          else
-             echo "NEW_VERSION=$new_version" >> $GITHUB_ENV 
+          else 
              echo "vss-extension-dev.json file"
              cat vss-extension-dev.json
           fi
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
 #      - name: versioning
 #        id: version-update
@@ -158,7 +157,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.EXTENSION_NAME }}-${{ env.NEW_VERSION }}-${{ env.CURRENT_VERSION }}-$new_version.vsix
+          name: ${{ env.EXTENSION_NAME }}-${{ env.NEW_VERSION }}-$new_version.vsix
           path: "*.vsix"
 
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
