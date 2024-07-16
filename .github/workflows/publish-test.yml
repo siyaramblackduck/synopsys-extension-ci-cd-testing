@@ -70,7 +70,6 @@ jobs:
              echo "vss-extension-dev.json file"
              cat vss-extension-dev.json
           fi
-      
 
 #      - name: versioning
 #        id: version-update
