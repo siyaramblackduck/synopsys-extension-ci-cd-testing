@@ -1,40 +1,40 @@
-name: deploy-extension-test
-
-on:
-  workflow_dispatch:
-
-jobs:
-  deploy-extension-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: deploy-extension
-        id: deploy-extension
-        env:
-          PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
-          ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
-          USER_TOKEN: ${{ secrets.USER_TOKEN }} #personal_access_token of azure devops account
-        run: |
-          vss_extension=$(cat vss-extension.json)
-          extension_name=$(echo $vss_extension | jq -r '.name' )
-          echo "Extension Name:" $extension_name
-          extension_version=$(echo $vss_extension | jq -r '.version')
-          echo "Extension Version:" $extension_version
-          echo "Installing tfx-cli..."
-          npm i -g tfx-cli
-          echo "Publishing extension $extension_name with version $extension_version"
-          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension.json  --token ${USER_TOKEN}  | tee tfx_output.log
-          publish_exit_code=${PIPESTATUS[0]}
-          if [ $publish_exit_code -eq 0 ]; then
-             echo "Extension $extension_name version $extension_version published successfully!"
-          else
-            echo "Failed to publish the extension $extension_name version $extension_version."
-            exit 1
-          fi
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: extension-artifact
-          path: vss-extension.json
+#name: deploy-extension-test
+#
+#on:
+#  workflow_dispatch:
+#
+#jobs:
+#  deploy-extension-test:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: deploy-extension
+#        id: deploy-extension
+#        env:
+#          PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
+#          ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
+#          USER_TOKEN: ${{ secrets.USER_TOKEN }} #personal_access_token of azure devops account
+#        run: |
+#          vss_extension=$(cat vss-extension.json)
+#          extension_name=$(echo $vss_extension | jq -r '.name' )
+#          echo "Extension Name:" $extension_name
+#          extension_version=$(echo $vss_extension | jq -r '.version')
+#          echo "Extension Version:" $extension_version
+#          echo "Installing tfx-cli..."
+#          npm i -g tfx-cli
+#          echo "Publishing extension $extension_name with version $extension_version"
+#          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension.json  --token ${USER_TOKEN}  | tee tfx_output.log
+#          publish_exit_code=${PIPESTATUS[0]}
+#          if [ $publish_exit_code -eq 0 ]; then
+#             echo "Extension $extension_name version $extension_version published successfully!"
+#          else
+#            echo "Failed to publish the extension $extension_name version $extension_version."
+#            exit 1
+#          fi
+#
+#      - name: Upload Artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: extension-artifact
+#          path: vss-extension.json
