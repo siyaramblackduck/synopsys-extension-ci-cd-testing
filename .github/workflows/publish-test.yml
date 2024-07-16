@@ -67,6 +67,8 @@ jobs:
              version=$current_extension_version
              echo "Extension version will not be updated. Current version: ${version}"
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
+             echo "vss-extension-dev.json file"
+             cat vss-extension-dev.json
           fi
       
       
@@ -108,6 +110,7 @@ jobs:
 
       - name: publish-extension
         id: publish-extension
+        if: ${{  steps.version-update.conclusion == 'success' && env.NEW_VERSION != env.CURRENT_VERSION }}
         env:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
