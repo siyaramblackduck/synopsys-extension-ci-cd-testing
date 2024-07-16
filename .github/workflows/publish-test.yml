@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: version-update
+      - name: versioning
         id: version-update
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
@@ -36,36 +36,82 @@ jobs:
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "current extension version: " $current_extension_version
-          previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
-          echo  "previous extension version:" $previous_extension_version
-          previous_major=$(echo $previous_extension_version | awk -F. '{print $1}')
-          previous_minor=$(echo $previous_extension_version | awk -F. '{print $2}')
-          current_major=$(echo $current_extension_version | awk -F. '{print $1}')
-          current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
-          current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
-          if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
-             new_version=$current_major.$current_minor.$((current_patch+1)) 
+          major=$(echo $current_extension_version | awk -F. '{print $1}')
+          minor=$(echo $current_extension_version | awk -F. '{print $2}')
+          patch=$(echo $current_extension_version | awk -F. '{print $3}')
+          COMMIT_MESSAGE_HEADER=$(git log -1 --pretty=%B | head -n 1)
+          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE_HEADER" | awk -F: '{print $1}')
+          echo "commit message: " $COMMIT_MESSAGE_HEADER
+          if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
+              version=$((major+1)).0.0
+              echo "updating extension version $current_extension_version to $version"
+          elif [[ "$COMMIT_MESSAGE" == "feat" ]]; then
+              version=$major.$((minor+1)).0
+              echo "updating extension version $current_extension_version to $version"
+          elif [[ "$COMMIT_MESSAGE" == "fix" ]]; then
+              version=$major.$minor.$((patch+1))
+              echo "updating extension version $current_extension_version to $version"
+          else
+              version=$current_extension_version
+          fi
+          
+          if [[ "$current_extension_version" != "$version" ]]; then
+             new_version=$version
              echo "Updating extension version to: ${new_version}"
              echo "NEW_VERSION=$version" >> $GITHUB_ENV    
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
-             echo "Updating extension_version.txt with the new version: ${new_version}"
-             sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
-             echo "Updated extension_version.txt file"
-             cat extension_version.txt
           else
              version=$current_extension_version
-             echo "Extension version will not be updated automatically. Current version: ${version}"
+             echo "Extension version will not be updated. Current version: ${version}"
              echo "NEW_VERSION=$version" >> $GITHUB_ENV 
-          fi  
+          fi
+      
+      
+
+#      - name: versioning
+#        id: version-update
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+#        run: |
+#          vss_extension_dev=$(cat vss-extension-dev.json)
+#          extension_name=$(echo $vss_extension_dev | jq -r '.name' )
+#          current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
+#          echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
+#          echo "current extension version: " $current_extension_version
+#          previous_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
+#          echo  "previous extension version:" $previous_extension_version
+#          previous_major=$(echo $previous_extension_version | awk -F. '{print $1}')
+#          previous_minor=$(echo $previous_extension_version | awk -F. '{print $2}')
+#          current_major=$(echo $current_extension_version | awk -F. '{print $1}')
+#          current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
+#          current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
+#          if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
+#             new_version=$current_major.$current_minor.$((current_patch+1))
+#             echo "Updating extension version to: ${new_version}"
+#             echo "NEW_VERSION=$version" >> $GITHUB_ENV
+#             echo "Updating vss-extension-dev.json with the new version: ${new_version}"
+#             jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
+#             echo "Updated vss-extension-dev.json file"
+#             cat vss-extension-dev.json
+#             echo "Updating extension_version.txt with the new version: ${new_version}"
+#             sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
+#             echo "Updated extension_version.txt file"
+#             cat extension_version.txt
+#          else
+#             version=$current_extension_version
+#             echo "Extension version will not be updated automatically. Current version: ${version}"
+#             echo "NEW_VERSION=$version" >> $GITHUB_ENV
+#          fi
 
       - name: publish-extension
         id: publish-extension
         env:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
+          USER_TOKEN: ${{ secrets.USER_TOKEN }} #personal_access_token of azure devops account
         run: |
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
@@ -73,20 +119,20 @@ jobs:
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "Extension Version:" $extension_version
           echo "Installing tfx-cli..."
-          npm i -g tfx-cli
-          echo "Publishing extension $extension_name with version $extension_version"
-          tfx_output=$(tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token aaa 2>&1)
-          publish_exit_code=$?
-          echo $publish_exit_code "status" $tfx_output
-          if [ $publish_exit_code -eq 0 ]; then
-             echo "Extension $extension_name version $extension_version published successfully!"
-          else
-            echo "Failed to publish the extension $extension_name version $extension_version."
-            exit 1
-          fi
+#          npm i -g tfx-cli
+#          echo "Publishing extension $extension_name with version $extension_version"
+#          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN} 2>&1 | tee tfx_output.log
+#          publish_exit_code=${PIPESTATUS[0]}
+#          if [ $publish_exit_code -eq 0 ]; then
+#             echo "Extension $extension_name version $extension_version published successfully!"
+#          else
+#            echo "Failed to publish the extension $extension_name version $extension_version."
+#            exit 1
+#          fi
 
 #  npm i -g tfx-cli
 #  tfx extension publish --publisher ${PUBLISHER_NAME}  --manifest-globs vss-extension-dev.json --share-with ${ORGANIZATION_NAME}  --token ${USER_TOKEN}
+
 
 #      - name: publish-extension
 #        id: publish-extension
