@@ -125,6 +125,9 @@ jobs:
           npx tfx-cli extension create --manifest-globs vss-extension-dev.json
           echo "Extension $extension_name created successfully!"
           echo "Publishing extension $extension_name with version $extension_version"
+        uses: actions/upload-artifact@v4
+        with:
+          path: "*.vsix"
 #          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN}  | tee tfx_output.log
 #          publish_exit_code=${PIPESTATUS[0]}
 #          if [ $publish_exit_code -eq 0 ]; then
@@ -152,12 +155,12 @@ jobs:
 #          git commit -m "update extension version [skip ci]"
 #          git push origin main
 #          echo "Successful updated version in vss-extension-dev.json..."
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: $extension_name.$extension-version
-          path: "*.vsix"
+#
+#      - name: Upload Artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: $extension_name.$extension-version
+#          path: "*.vsix"
 
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
