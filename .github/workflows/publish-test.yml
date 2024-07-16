@@ -108,7 +108,7 @@ jobs:
 
       - name: publish-extension
         id: publish-extension
-        if: ${{  steps.version-update.conclusion == 'success' && env.NEW_VERSION != env.CURRENT_VERSION }}
+        if: ${{  steps.version-update.conclusion == 'success'  }}
         env:
           PUBLISHER_NAME: ${{ secrets.PUBLISHER_NAME }}
           ORGANIZATION_NAME: ${{ secrets.ORG_NAME }}
