@@ -78,6 +78,7 @@ jobs:
         run: |
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
+          echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "current extension version: " $current_extension_version
@@ -91,7 +92,6 @@ jobs:
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
              new_version=$current_major.$current_minor.$((current_patch+1))
              echo "Updating extension version to: ${new_version}"
-             echo "NEW_VERSION=$version" >> $GITHUB_ENV
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
@@ -101,10 +101,10 @@ jobs:
              echo "Updated extension_version.txt file"
              cat extension_version.txt
           else
-             version=$current_extension_version
-             echo "Extension version will not be updated automatically. Current version: ${version}"
-             echo "NEW_VERSION=$version" >> $GITHUB_ENV
+             new_version=$current_extension_version
+             echo "Extension version will not be updated automatically. Current version: ${new_version}"
           fi
+          echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: publish-extension
         id: publish-extension
