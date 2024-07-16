@@ -156,6 +156,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
+          name: $extension_name.$extension-version
           path: "*.vsix"
 
 #          gh pr create --base main --head automatic_version_update --title "pr test" --body "Created by Github action" --fill
