@@ -71,7 +71,6 @@ jobs:
              cat vss-extension-dev.json
           fi
       
-      
 
 #      - name: versioning
 #        id: version-update
