@@ -44,16 +44,16 @@ jobs:
           echo "commit message: " $COMMIT_MESSAGE_HEADER
           if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
               new_version=$((major+1)).0.0
-              echo "Updating extension version $current_extension_version to: $new_version"
+              echo "Updating extension version $current_extension_version --> $new_version"
           elif [[ "$COMMIT_MESSAGE" == "perf" ]]; then
               new_version=$((major+1)).0.0
-              echo "Updating extension version $current_extension_version to: $new_version" 
+              echo "Updating extension version $current_extension_version --> $new_version" 
           elif [[ "$COMMIT_MESSAGE" == "feat" ]]; then
               new_version=$major.$((minor+1)).0
-              echo "Updating extension version $current_extension_version to: $new_version"
+              echo "Updating extension version $current_extension_version --> $new_version"
           elif [[ "$COMMIT_MESSAGE" == "fix" ]]; then
               new_version=$major.$minor.$((patch+1))
-              echo "Updating extension version $current_extension_version to: $new_version"
+              echo "Updating extension version $current_extension_version --> $new_version"
           else
               new_version=$current_extension_version
           fi
