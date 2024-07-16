@@ -44,20 +44,22 @@ jobs:
           echo "commit message: " $COMMIT_MESSAGE_HEADER
           if [[ "$COMMIT_MESSAGE" == "BREAKING CHANGE" ]]; then
               version=$((major+1)).0.0
-              echo "updating extension version $current_extension_version to $version"
+              echo "Updating extension version $current_extension_version to: $version"
+          elif [[ "$COMMIT_MESSAGE" == "perf" ]]; then
+              version=$((major+1)).0.0
+              echo "Updating extension version $current_extension_version to: $version" 
           elif [[ "$COMMIT_MESSAGE" == "feat" ]]; then
               version=$major.$((minor+1)).0
-              echo "updating extension version $current_extension_version to $version"
+              echo "Updating extension version $current_extension_version to: $version"
           elif [[ "$COMMIT_MESSAGE" == "fix" ]]; then
               version=$major.$minor.$((patch+1))
-              echo "updating extension version $current_extension_version to $version"
+              echo "Updating extension version $current_extension_version to: $version"
           else
               version=$current_extension_version
           fi
           
           if [[ "$current_extension_version" != "$version" ]]; then
              new_version=$version
-             echo "Updating extension version to: ${new_version}"
              echo "NEW_VERSION=$version" >> $GITHUB_ENV    
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json 
