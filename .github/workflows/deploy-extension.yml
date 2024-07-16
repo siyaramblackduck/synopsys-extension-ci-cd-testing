@@ -38,5 +38,3 @@ jobs:
         with:
           name: extension-artifact
           path: vss-extension.json
-#          npm i -g tfx-cli
-#          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json --token ${USER_TOKEN}
