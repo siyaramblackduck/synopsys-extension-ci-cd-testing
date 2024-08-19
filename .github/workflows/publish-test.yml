@@ -93,7 +93,7 @@ jobs:
              new_version=$current_major.$current_minor.$((current_patch+1))
              echo "Updating extension version to: ${new_version}"
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
-             jq  '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
+             jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
              echo "Updating extension_version.txt with the new version: ${new_version}"
@@ -104,13 +104,13 @@ jobs:
              cd synopsys-task 
              echo "Updating package.json version to: ${new_version}"
              echo "Updating package.json with the new version: ${new_version}"
-             jq  '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
+             jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
              echo "Updated package.json file"
              cat package.json
           
              echo "Updating task.json version to: ${new_version}"
              echo "Updating task.json with the new version: ${new_version}"
-             jq  '.version.Patch = $((current_patch+1))' task.json > task.json.tmp && mv task.json.tmp task.json
+             jq --arg patch_version "$((current_patch+1))" '.version.Patch = $patch_version' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
              cat task.json
     
