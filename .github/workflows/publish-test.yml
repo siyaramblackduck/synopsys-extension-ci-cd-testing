@@ -153,7 +153,7 @@ jobs:
           echo "Updating version in vss-extension-dev.json..."
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          git add vss-extension-dev.json extension_version.txt
+          git add package.json vss-extension-dev.json extension_version.txt
           git commit -m "update extension version [skip ci]"
           git push origin main
           echo "Successful updated version in vss-extension-dev.json..."
