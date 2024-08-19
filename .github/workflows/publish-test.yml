@@ -110,8 +110,9 @@ jobs:
           
              echo "Updating task.json version to: ${new_version}"
              echo "Updating task.json with the new version: ${new_version}"
-             jq --arg new_patch_version "$$((current_patch+1))" '.version.patch = $$((current_patch+1))' task.json > task.json.tmp && mv task.json.tmp task.json
+             jq --arg new_version "$$((current_patch+1))" '.version.patch = $$((current_patch+1))' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
+             cat task.json
     
           else
              new_version=$current_extension_version
