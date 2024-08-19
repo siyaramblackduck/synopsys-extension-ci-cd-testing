@@ -161,7 +161,7 @@ jobs:
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git add  vss-extension-dev.json extension_version.txt
           cd synopsys-task
-          git add package.json
+          git add package.json task.json
           git commit -m "update extension version [skip ci]"
           git push origin main
           echo "Successful updated version in vss-extension-dev.json..."
