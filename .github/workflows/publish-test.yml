@@ -103,7 +103,7 @@ jobs:
              cd synopsys-task 
              echo "Updating package.json version to: ${new_version}"
              echo "Updating package.json with the new version: ${new_version}"
-             jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.json.tmp package.json.json
+             jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
              echo "Updated package.json file"
              cat package.json
              cd ../
