@@ -112,7 +112,6 @@ jobs:
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
              echo "Updated package-lock.json file"
-             cat package-lock.json
           
              echo "Updating task.json version to: ${new_version}"
              echo "Updating task.json with the new version: ${new_version}"
@@ -168,7 +167,7 @@ jobs:
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git add  vss-extension-dev.json extension_version.txt
           cd synopsys-task
-          git add package.json task.json
+          git add package.json package-lock.json task.json
           git commit -m "update extension version [skip ci]"
           git push origin main
           echo "Successful updated version in vss-extension-dev.json..."
