@@ -100,12 +100,13 @@ jobs:
              sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
              echo "Updated extension_version.txt file"
              cat extension_version.txt
-          
+             cd synopsys-task 
              echo "Updating package.json version to: ${new_version}"
              echo "Updating package.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.json.tmp package.json.json
              echo "Updated package.json file"
              cat package.json
+             cd ../
     
           else
              new_version=$current_extension_version
@@ -132,7 +133,6 @@ jobs:
           npx tfx-cli extension create --manifest-globs vss-extension-dev.json
           echo "Extension $extension_name created successfully!"
           echo "Publishing extension $extension_name with version $extension_version"
-#          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN}  | tee tfx_output.log
           publish_exit_code=${PIPESTATUS[0]}
           if [ $publish_exit_code -eq 0 ]; then
              echo "Extension $extension_name version $extension_version published successfully!"
@@ -142,7 +142,8 @@ jobs:
           fi
 
 #  npm i -g tfx-cli
-#  tfx extension publish --publisher ${PUBLISHER_NAME}  --manifest-globs vss-extension-dev.json --share-with ${ORGANIZATION_NAME}  --token ${USER_TOKEN}
+#  tfx extension publish --publisher ${PUBLISHER_NAME}  --manifest-globs vss-extension-dev.json --share-with ${ORGANIZATION_NAME}  --token ${USER_TOKEN} | tee tfx_output.log
+#  tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN}  | tee tfx_output.log
 
       - name: update extension version
         id: update-extension-version
