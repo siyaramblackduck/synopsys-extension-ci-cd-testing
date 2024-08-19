@@ -100,13 +100,26 @@ jobs:
              sed -i "s/extension_version=.*/extension_version=$new_version/" extension_version.txt
              echo "Updated extension_version.txt file"
              cat extension_version.txt
+          
              cd synopsys-task 
              echo "Updating package.json version to: ${new_version}"
              echo "Updating package.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
              echo "Updated package.json file"
              cat package.json
-             cd ../
+          
+             echo "Updating task.json version to: ${new_version}"
+             echo "Updating task.json with the new version: ${new_version}"
+             jq --arg new_patch_version "$$((current_patch+1))" '.version.patch = $$((current_patch+1))' task.json > task.json.tmp && mv task.json.tmp task.json
+             echo "Updated task.json file"
+#             cat task.json
+
+#             echo "Updating package-lock.json version to: ${new_version}"
+#             echo "Updating package-lock.json with the new version: ${new_version}"
+#             jq --arg new_version "$new_version" '.version = $new_version' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
+#             echo "Updated package-lock.json file"
+#             cat package-lock.json
+#             cd ../
     
           else
              new_version=$current_extension_version
@@ -154,7 +167,9 @@ jobs:
           echo "Updating version in vss-extension-dev.json..."
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          git add package.json vss-extension-dev.json extension_version.txt
+          git add  vss-extension-dev.json extension_version.txt
+          cd synopsys-task
+          git add package.json
           git commit -m "update extension version [skip ci]"
           git push origin main
           echo "Successful updated version in vss-extension-dev.json..."
