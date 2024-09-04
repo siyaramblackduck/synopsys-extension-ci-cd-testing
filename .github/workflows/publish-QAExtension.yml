@@ -37,7 +37,7 @@ jobs:
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "current extension version: " $current_extension_version
-          previous_published_extension_version=$(grep 'published_extension_version' extension_version.txt | cut -d '=' -f 2)
+          previous_published_extension_version=$(grep 'extension_version' extension_version.txt | cut -d '=' -f 2)
           echo  "previous published extension version:" $previous_published_extension_version
           previous_major=$(echo $previous_published_extension_versionn | awk -F. '{print $1}')
           previous_minor=$(echo $previous_published_extension_version | awk -F. '{print $2}')
