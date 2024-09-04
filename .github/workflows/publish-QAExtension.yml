@@ -36,9 +36,9 @@ jobs:
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
-          echo "current extension version: " $current_extension_version
+          echo "CURRENT EXTENSION VERSION: " $current_extension_version
           previous_published_extension_version=$(grep 'published_extension_version' extension_version.txt | cut -d '=' -f 2)
-          echo  "previous published extension version: " $previous_published_extension_version
+          echo  "PREVIOUS PUBLISHED EXTENSION VERSION: " $previous_published_extension_version
           previous_major=$(echo $previous_published_extension_version | awk -F. '{print $1}')
           previous_minor=$(echo $previous_published_extension_version | awk -F. '{print $2}')
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
@@ -47,12 +47,14 @@ jobs:
           if [ "$previous_major" -eq "$current_major" ] && [ "$previous_minor" -eq "$current_minor" ]; then
              new_version=$current_major.$current_minor.$((current_patch+1))
              echo "Updating extension version to: ${new_version}"
+          
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
+          
              echo "Updating extension_version.txt with the new version: ${new_version}"
-             sed -i "s/previous_published_extension_version=.*/previous_published_extension_version=$new_version/" extension_version.txt
+             sed -i "s/published_extension_version=.*/published_extension_version=$new_version/" extension_version.txt
              echo "Updated extension_version.txt file"
              cat extension_version.txt
           
@@ -64,10 +66,11 @@ jobs:
               
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
+             echo "Updated package-lock.json file"
           
              echo "Updating task.json with the new version: ${new_version}"
              jq --argjson patch_version $((current_patch+1)) '.version.Patch |= $patch_version' task.json > task.json.tmp && mv task.json.tmp task.json
-    
+             echo "Updated task.json file"
           else
              new_version=$current_extension_version
              echo "Extension version will not be updated automatically. Current version: ${new_version}"
