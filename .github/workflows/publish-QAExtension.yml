@@ -52,7 +52,10 @@ jobs:
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
-             echo
+          else
+             new_version=$current_extension_version
+             echo "Extension version will not be updating automatically. Current version: ${new_version}"
+          fi
           
              echo "Updating extension_version.txt with the new version: ${new_version}"
              sed -i "s/published_extension_version=.*/published_extension_version=$new_version/" extension_version.txt
@@ -66,7 +69,7 @@ jobs:
              cat package.json
              echo "Updated package.json file"
              echo
-              
+          
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
              echo "Updated package-lock.json file"
@@ -75,10 +78,6 @@ jobs:
              echo "Updating task.json with the new version: ${new_version}"
              jq --argjson patch_version $((current_patch+1)) '.version.Patch |= $patch_version' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
-          else
-             new_version=$current_extension_version
-             echo "Extension version will not be updating automatically. Current version: ${new_version}"
-          fi
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: publish-QAExtension
