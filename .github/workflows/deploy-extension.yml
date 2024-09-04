@@ -1,4 +1,4 @@
-name: deploy-extension-test
+name: deploy-synopsys-extension
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ jobs:
         env:
           DEPLOY_PUBLISHER_NAME: ${{ secrets.DEPLOY_PUBLISHER_NAME }}
           DEPLOY_ORGANIZATION_NAME: ${{ secrets.DEPLOY_ORG_NAME }}
-          USER_TOKEN: ${{ secrets.USER_TOKEN }} #personal_access_token of azure devops account
+          USER_TOKEN: ${{ secrets.DEPLOY_USER_TOKEN }} #personal_access_token of azure devops account
         run: |
           vss_extension=$(cat vss-extension.json)
           extension_name=$(echo $vss_extension | jq -r '.name' )
@@ -33,8 +33,3 @@ jobs:
 #            exit 1
 #          fi
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: extension-artifact
-          path: vss-extension.json
