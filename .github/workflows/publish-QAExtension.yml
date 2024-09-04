@@ -83,8 +83,9 @@ jobs:
              --argjson minor "$current_minor" \
              --argjson patch "$current_patch" \
              '.version.Patch |= $patch' > task.json.tmp && mv task.json.tmp task.json
-             echo "Updated task.json file"
              cat task.json
+             echo "Updated task.json file"
+            
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 #  jq --argjson  patch_version  $((current_patch+1)) '.version.Patch |= $patch_version' task.json > task.json.tmp && mv task.json.tmp task.json
 #      - name: publish-QAExtension
