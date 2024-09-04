@@ -1,1 +1,1 @@
-published_extension_version=2.2.8
+published_extension_version=2.2.9
