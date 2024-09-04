@@ -78,7 +78,7 @@ jobs:
              echo
           
              echo "Updating task.json with the new version: ${new_version}"
-             jq --argjson patch "$current_patch"  '.version.Patch |= $patch' > task.json.tmp && mv task.json.tmp task.json
+             jq --argjson patch "$current_patch"  '.version.Patch |= $patch' task.json > task.json.tmp && mv task.json.tmp task.json
              cat task.json
              echo "Updated task.json file"
             
