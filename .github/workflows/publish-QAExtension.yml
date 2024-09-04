@@ -79,9 +79,9 @@ jobs:
           
              echo "Updating task.json with the new version: ${new_version}"
              jq \
-             --arg major "$current_major" \
-             --arg minor "$current_minor" \
-             --arg patch "$current_patch" \
+             --argjson major "$current_major" \
+             --argjson minor "$current_minor" \
+             --argjson patch "$current_patch" \
              '.version.Major = ($major | tonumber) | .version.Minor = ($minor | tonumber ) .version.Patch = ($patch | tonumber) > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
              cat task.json
