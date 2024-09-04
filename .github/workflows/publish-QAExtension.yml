@@ -70,13 +70,11 @@ jobs:
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
              echo "Updated package-lock.json file"
-             cat package-lock.json
              echo
           
              echo "Updating task.json with the new version: ${new_version}"
              jq --argjson patch_version $((current_patch+1)) '.version.Patch |= $patch_version' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
-             cat task.json
           else
              new_version=$current_extension_version
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
@@ -105,6 +103,7 @@ jobs:
           npx tfx-cli extension create --manifest-globs vss-extension-dev.json
           echo "Extension $extension_name created successfully!"
           echo "Publishing extension $extension_name with version $extension_version"
+          tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN}  | tee tfx_output.log
           publish_exit_code=${PIPESTATUS[0]}
           if [ $publish_exit_code -eq 0 ]; then
              echo "Extension $extension_name with version $extension_version published successfully!"
