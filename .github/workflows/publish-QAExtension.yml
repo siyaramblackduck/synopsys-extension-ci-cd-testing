@@ -55,22 +55,25 @@ jobs:
           
              echo "Updating extension_version.txt with the new version: ${new_version}"
              sed -i "s/published_extension_version=.*/published_extension_version=$new_version/" extension_version.txt
-             echo "Updated extension_version.txt file"
              cat extension_version.txt
+             echo "Updated extension_version.txt file"
           
              cd synopsys-task 
              echo "Updating package.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
-             echo "Updated package.json file"
              cat package.json
+             echo "Updated package.json file"
               
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
              echo "Updated package-lock.json file"
+             cat package-lock.json
+             echo
           
              echo "Updating task.json with the new version: ${new_version}"
              jq --argjson patch_version $((current_patch+1)) '.version.Patch |= $patch_version' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
+             cat task.json
           else
              new_version=$current_extension_version
              echo "Extension version will not be updated automatically. Current version: ${new_version}"
@@ -117,15 +120,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-          echo "Updating version in vss-extension-dev.json..."
+          echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git add  vss-extension-dev.json extension_version.txt
           cd synopsys-task
           git add package.json package-lock.json task.json
           git commit -m "update extension version [skip ci]"
-#          git push origin main
-#          echo "Successful updated version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
+          git push origin main
+          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
 #          git config --local user.name "github-actions[bot]"
 #          git config --local user.email "github-actions[bot]@users.noreply.github.com"
       - name: Upload Artifact
