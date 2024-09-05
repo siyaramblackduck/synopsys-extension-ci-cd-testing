@@ -38,7 +38,7 @@ jobs:
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT EXTENSION VERSION: " $current_extension_version
           previous_published_qaextension_version=$(grep 'published_qaextension_version' extension_version.txt | cut -d '=' -f 2)
-          echo  "PREVIOUS PUBLISHED QAEXTENSION VERSION: " $previous_published_extension_version
+          echo  "PREVIOUS PUBLISHED QAEXTENSION VERSION: " $previous_published_qaextension_version
           previous_major=$(echo $previous_published_qaextension_version | awk -F. '{print $1}')
           previous_minor=$(echo $previous_published_qaextension_version | awk -F. '{print $2}')
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
