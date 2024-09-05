@@ -51,7 +51,7 @@ jobs:
           fi
           
              echo "Updating extension_version.txt with the new version: ${new_version}"
-             sed -i "s/published_extension_version=.*/published_extension_version=$new_version/" extension_version.txt
+             sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
              cat extension_version.txt
              echo
              echo "Updated extension_version.txt file"
