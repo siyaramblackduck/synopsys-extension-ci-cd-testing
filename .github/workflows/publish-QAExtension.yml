@@ -1,16 +1,6 @@
 name: publish-QAExtension
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
   workflow_dispatch:
 
 jobs:
@@ -34,6 +24,7 @@ jobs:
           vss_extension_dev=$(cat vss-extension-dev.json)
           extension_name=$(echo $vss_extension_dev | jq -r '.name' )
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
+          echo "EXTENSION NAME: "$extension_name
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT EXTENSION VERSION: " $current_extension_version
