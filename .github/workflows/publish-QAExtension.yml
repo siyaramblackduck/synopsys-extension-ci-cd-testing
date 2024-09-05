@@ -65,6 +65,7 @@ jobs:
           
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
+             cat package-lock.json 
              echo "Updated package-lock.json file"
              echo
           
