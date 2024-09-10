@@ -25,6 +25,9 @@ jobs:
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT EXTENSION VERSION: " $current_extension_version
+          current_major=$(echo $current_extension_version | awk -F. '{print $1}')
+          current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
+          current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "commit message: " $COMMIT_MESSAGE     
           if [[ "$COMMIT_MESSAGE" == *"update-version"* ]]; then
