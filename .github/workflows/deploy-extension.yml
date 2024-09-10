@@ -28,12 +28,18 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "commit message: " $COMMIT_MESSAGE     
           if [[ "$COMMIT_MESSAGE" == *"update-version"* ]]; then
-             new_version=current_extension_version
+             new_version=$current_extension_version
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
              echo
+          
+             echo "Updating extension_version.txt with the new version: ${new_version}"
+             sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
+             cat extension_version.txt
+             echo
+             echo "Updated extension_version.txt file"
           
              cd synopsys-task 
              echo "Updating package.json with the new version: ${new_version}"
@@ -45,7 +51,7 @@ jobs:
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
              echo "Updated package-lock.json file"
-             cat package-lock.json.json
+             cat package-lock.json
              echo
 
              echo "Updating task.json with the new version: ${new_version}"
@@ -99,7 +105,8 @@ jobs:
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git add  vss-extension-dev.json extension_version.txt
-          cd synopsys-task
+          echo "Install dependencies && Rebuild the dist/ directory"
+          cd synopsys-task && npm ci && npm run build && npm run package
           git add package.json package-lock.json task.json
           git commit -m "update extension version [skip ci]"
 #          git push origin main
