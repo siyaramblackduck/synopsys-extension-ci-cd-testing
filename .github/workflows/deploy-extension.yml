@@ -24,10 +24,11 @@ jobs:
           echo "EXTENSION NAME: "$extension_name
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
-          echo "CURRENT QAEXTENSION VERSION: " $current_extension_version
+          echo "CURRENT EXTENSION VERSION: " $current_extension_version
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "commit message: " $COMMIT_MESSAGE     
           if [[ "$COMMIT_MESSAGE" == *"update-version"* ]]; then
+             new_version = current_extension_version
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
@@ -44,11 +45,13 @@ jobs:
              echo "Updating package-lock.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
              echo "Updated package-lock.json file"
+             cat package-lock.json.json
              echo
 
              echo "Updating task.json with the new version: ${new_version}"
              jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
+             cat task.json
           else
              new_version=$current_extension_version
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
@@ -102,10 +105,5 @@ jobs:
 #          git push origin main
 #          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.EXTENSION_NAME }}-${{ env.NEW_VERSION }}.vsix
-          path: "*.vsix"
 
 

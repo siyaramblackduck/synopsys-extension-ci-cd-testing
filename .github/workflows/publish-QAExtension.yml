@@ -44,6 +44,13 @@ jobs:
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
+             echo
+          
+             echo "Updating extension_version.txt with the new version: ${new_version}"
+             sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
+             cat extension_version.txt
+             echo
+             echo "Updated extension_version.txt file"
           else
              new_version=$current_extension_version
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
