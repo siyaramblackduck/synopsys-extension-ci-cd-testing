@@ -28,7 +28,7 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "commit message: " $COMMIT_MESSAGE     
           if [[ "$COMMIT_MESSAGE" == *"update-version"* ]]; then
-             new_version = current_extension_version
+             new_version=current_extension_version
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
