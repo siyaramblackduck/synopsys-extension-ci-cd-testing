@@ -44,34 +44,10 @@ jobs:
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
-             echo
           else
              new_version=$current_extension_version
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
           fi
-          
-             echo "Updating extension_version.txt with the new version: ${new_version}"
-             sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
-             cat extension_version.txt
-             echo
-             echo "Updated extension_version.txt file"
-          
-             cd synopsys-task 
-             echo "Updating package.json with the new version: ${new_version}"
-             jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
-             cat package.json
-             echo "Updated package.json file"
-             echo
-          
-             echo "Updating package-lock.json with the new version: ${new_version}"
-             jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
-             echo "Updated package-lock.json file"
-             echo
-          
-             echo "Updating task.json with the new version: ${new_version}"
-             jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
-             echo "Updated task.json file"
-            
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
       - name: publish-QAExtension
         id: publish-qaextension
@@ -86,9 +62,6 @@ jobs:
           echo "Extension Name:" $extension_name
           extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "Extension Version:" $extension_version
-          echo "Install dependencies && Rebuild the dist/ directory"
-          cd synopsys-task && npm ci && npm run build && npm run package
-          cd ../
           echo "Installing tfx-cli..."
           npm i -g tfx-cli
           echo "Creating extension $extension_name with version $extension_version"
@@ -120,8 +93,8 @@ jobs:
           cd synopsys-task
           git add package.json package-lock.json task.json
           git commit -m "update extension version [skip ci]"
-          git push origin main
-          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
+#          git push origin main
+#          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

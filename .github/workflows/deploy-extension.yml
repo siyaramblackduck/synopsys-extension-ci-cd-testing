@@ -25,36 +25,15 @@ jobs:
           current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT QAEXTENSION VERSION: " $current_extension_version
-          previous_published_qaextension_version=$(grep 'published_qaextension_version' extension_version.txt | cut -d '=' -f 2)
-          echo  "PREVIOUS PUBLISHED QAEXTENSION VERSION: " $previous_published_qaextension_version
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "commit message: " $COMMIT_MESSAGE     
-          previous_major=$(echo $previous_published_qaextension_version | awk -F. '{print $1}')
-          previous_minor=$(echo $previous_published_qaextension_version | awk -F. '{print $2}')
-          current_major=$(echo $current_extension_version | awk -F. '{print $1}')
-          current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
-          current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
           if [[ "$COMMIT_MESSAGE" == *"update-version"* ]]; then
-             current_patch=$((current_patch+1))
-             new_version=$current_major.$current_minor.$current_patch
-             echo "Updating extension version to: ${new_version}"
-
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
              echo "Updated vss-extension-dev.json file"
              cat vss-extension-dev.json
              echo
-          else
-             new_version=$current_extension_version
-             echo "Extension version will not be updating automatically. Current version: ${new_version}"
-          fi
-
-             echo "Updating extension_version.txt with the new version: ${new_version}"
-             sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
-             cat extension_version.txt
-             echo
-             echo "Updated extension_version.txt file"
-
+          
              cd synopsys-task 
              echo "Updating package.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
@@ -70,29 +49,34 @@ jobs:
              echo "Updating task.json with the new version: ${new_version}"
              jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
              echo "Updated task.json file"
-
+          else
+             new_version=$current_extension_version
+             echo "Extension version will not be updating automatically. Current version: ${new_version}"
+          fi
+            
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
-      - name: deploy-extension
-        id: deploy-extension
-        env:
-          DEPLOY_PUBLISHER_NAME: ${{ secrets.DEPLOY_PUBLISHER_NAME }}
-          DEPLOY_ORGANIZATION_NAME: ${{ secrets.DEPLOY_ORG_NAME }}
-          USER_TOKEN: ${{ secrets.DEPLOY_USER_TOKEN }} #personal_access_token of azure devops account
-        run: |
-          vss_extension=$(cat vss-extension.json)
-          extension_name=$(echo $vss_extension | jq -r '.name' )
-          echo "Extension Name:" $extension_name
-          extension_version=$(echo $vss_extension | jq -r '.version')
-          echo "Extension Version:" $extension_version
-          echo "Install dependencies && Rebuild the dist/ directory"
-          cd synopsys-task && npm ci && npm run build && npm run package
-          cd ../
-          echo "Installing tfx-cli..."
-          npm i -g tfx-cli
-          echo "Creating extension $extension_name with version $extension_version"
-          npx tfx-cli extension create --manifest-globs vss-extension.json
-          echo "Extension $extension_name created successfully!"
-          echo "Publishing extension $extension_name with version $extension_version"
+
+#      - name: deploy-extension
+#        id: deploy-extension
+#        env:
+#          DEPLOY_PUBLISHER_NAME: ${{ secrets.DEPLOY_PUBLISHER_NAME }}
+#          DEPLOY_ORGANIZATION_NAME: ${{ secrets.DEPLOY_ORG_NAME }}
+#          USER_TOKEN: ${{ secrets.DEPLOY_USER_TOKEN }} #personal_access_token of azure devops account
+#        run: |
+#          vss_extension=$(cat vss-extension.json)
+#          extension_name=$(echo $vss_extension | jq -r '.name' )
+#          echo "Extension Name:" $extension_name
+#          extension_version=$(echo $vss_extension | jq -r '.version')
+#          echo "Extension Version:" $extension_version
+#          echo "Install dependencies && Rebuild the dist/ directory"
+#          cd synopsys-task && npm ci && npm run build && npm run package
+#          cd ../
+#          echo "Installing tfx-cli..."
+#          npm i -g tfx-cli
+#          echo "Creating extension $extension_name with version $extension_version"
+#          npx tfx-cli extension create --manifest-globs vss-extension.json
+#          echo "Extension $extension_name created successfully!"
+#          echo "Publishing extension $extension_name with version $extension_version"
 #         tfx extension publish --publisher ${DEPLOY_PUBLISHER_NAME}  --manifest-globs vss-extension.json  --token ${USER_TOKEN} | tee tfx_output.log
 #         publish_exit_code=${PIPESTATUS[0]}
 #         if [ $publish_exit_code -eq 0 ]; then
@@ -101,5 +85,27 @@ jobs:
 #            echo "Failed to publish the extension $extension_name with version $extension_version."
 #            exit 1
 #          fi
+
+      - name: update extension version in file
+        id: update-extension-version
+        if: "!contains(github.event.commits[0].message, 'version-update')"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        run: |
+          echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
+          git config --local user.name "$(git log -n 1 --pretty=format:%an)"
+          git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+          git add  vss-extension-dev.json extension_version.txt
+          cd synopsys-task
+          git add package.json package-lock.json task.json
+          git commit -m "update extension version [skip ci]"
+#          git push origin main
+#          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXTENSION_NAME }}-${{ env.NEW_VERSION }}.vsix
+          path: "*.vsix"
 
 
