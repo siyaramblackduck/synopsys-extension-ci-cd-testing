@@ -101,6 +101,7 @@ jobs:
       - name: update extension version in file
         id: update-extension-version
         if: "!contains(github.event.commits[0].message, 'update-version')"
+        uses: peter-evans/create-pull-request@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
