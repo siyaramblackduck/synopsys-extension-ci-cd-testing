@@ -112,6 +112,7 @@ jobs:
           echo "Install dependencies && Rebuild the dist/ directory"
           cd synopsys-task && npm ci && npm run build && npm run package
           git add package.json package-lock.json task.json
+          git add .
           git commit -m "update extension version to ${{ env.NEW_VERSION }} [skip ci]"
           git push origin version_update
           echo gh --version
