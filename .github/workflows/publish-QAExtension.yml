@@ -102,7 +102,7 @@ jobs:
           git push origin extension_version_update
           echo gh --version
           gh pr create --base main --head extension_version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}"
-#          gh pr merge --squash --subject "extension version upgrade to ${{ env.NEW_VERSION }} PR merge [skip ci]" --delete-branch
+          gh pr merge --squash --subject "extension version upgrade to ${{ env.NEW_VERSION }}  [skip ci]" --delete-branch
 #          git branch -d extension_version_update
 
       #          git push origin main
