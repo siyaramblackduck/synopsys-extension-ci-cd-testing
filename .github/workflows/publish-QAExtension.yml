@@ -88,9 +88,9 @@ jobs:
 #  tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN}  | tee tfx_output.log
 
       - name: update extension version in file
+        uses: peter-evans/create-pull-request@v7
         id: update-extension-version
         if: ${{  steps.publish-qaextension.conclusion == 'success' }}
-        uses: peter-evans/create-pull-request@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |

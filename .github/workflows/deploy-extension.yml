@@ -99,6 +99,7 @@ jobs:
 #          fi
 
       - name: update extension version in file
+        uses: peter-evans/create-pull-request@v7
         id: update-extension-version
         if: "!contains(github.event.commits[0].message, 'update-version')"
         env:
