@@ -103,7 +103,7 @@ jobs:
           echo gh --version
           gh pr create --base main --head extension_version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
           gh pr merge --squash --subject "extension version upgrade PR merge [skip ci]" --delete-branch
-          git branch -d extension_version_update
+#          git branch -d extension_version_update
 
       #          git push origin main
 #          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
