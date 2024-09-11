@@ -116,6 +116,7 @@ jobs:
           git push origin version_update
           echo gh --version
           gh pr create --base main --head version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
+#          gh pr merge --squash --subject "extension version upgrade to ${{ env.NEW_VERSION }} PR merge [skip ci]" --delete-branch
 #          git push origin version_update
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
