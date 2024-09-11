@@ -108,12 +108,12 @@ jobs:
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+          gh pr create --base main --head version_update --title "update-version" --body `Update version to ${{ env.NEW_VERSION }}` --fill
           git add  vss-extension-dev.json extension_version.txt
           echo "Install dependencies && Rebuild the dist/ directory"
           cd synopsys-task && npm ci && npm run build && npm run package
           git add package.json package-lock.json task.json
           git commit -m "update extension version [skip ci]"
-          gh pr create --base main --head version_update --title "update-version" --body `Update version to ${{ env.NEW_VERSION }}` --fill
 #          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
 #          git branch -d automatic_version_update
 
