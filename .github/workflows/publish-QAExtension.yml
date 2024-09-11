@@ -98,7 +98,11 @@ jobs:
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git add  vss-extension-dev.json extension_version.txt
           git commit -m "update extension version [skip ci]"
-#          git push origin main
+          gh pr create --base main --head version_update --title "QAExtension version-upgrade" --body "updating QAExtension version to ${{ env.NEW_VERSION }}" --fill
+          gh pr merge --squash --subject "version upgrade PR merge [skip ci]" --body "merging version upgrade PR changes" --delete-branch
+          git branch -d version_update
+
+      #          git push origin main
 #          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
 
       - name: Upload Artifact
