@@ -88,7 +88,6 @@ jobs:
 #  tfx extension publish --publisher TestCIPub  --manifest-globs vss-extension-dev.json  --token ${USER_TOKEN}  | tee tfx_output.log
 
       - name: update extension version in file
-        uses: peter-evans/create-pull-request@v7
         id: update-extension-version
         if: ${{  steps.publish-qaextension.conclusion == 'success' }}
         env:
@@ -97,6 +96,7 @@ jobs:
           echo "Updating extension version in vss-extension-dev.json & extension_version.txt file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
+          git checkout -b automatic_version_update
           git add  vss-extension-dev.json extension_version.txt
           git commit -m "update extension version [skip ci]"
           gh pr create --base main --head version_update --title "QAExtension version-upgrade" --body "updating QAExtension version to ${{ env.NEW_VERSION }}" --fill
