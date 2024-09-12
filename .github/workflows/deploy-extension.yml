@@ -65,7 +65,7 @@ jobs:
 
       - name: update extension version in file
         id: update-extension-version
-        if: "contains(github.event.commits[0].message, 'upgrade-version')"
+        if: "!contains(github.event.commits[0].message, 'upgrade-version')"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
