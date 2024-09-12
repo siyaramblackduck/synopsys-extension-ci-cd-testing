@@ -66,7 +66,7 @@ jobs:
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
-        if: "contains(github.event.head_commit.message, 'upgrade-version')"
+        if: "contains(env.COMMIT_MESSAGE, 'upgrade-version')"
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
@@ -74,7 +74,6 @@ jobs:
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)" 
-
 
 #          git checkout -b extension_version_update
 #          git add  vss-extension-dev.json extension_version.txt
