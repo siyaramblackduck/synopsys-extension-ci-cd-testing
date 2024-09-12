@@ -77,7 +77,7 @@ jobs:
           echo $github_commit
           echo ${{ github_commit }}
           echo ${github_commit}
-          echo github_commit
+
 
 #          git checkout -b extension_version_update
 #          git add  vss-extension-dev.json extension_version.txt
