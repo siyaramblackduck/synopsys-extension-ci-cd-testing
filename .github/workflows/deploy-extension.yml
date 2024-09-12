@@ -60,6 +60,7 @@ jobs:
           else
              new_version=$current_extension_version
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
+             exit 1
           fi     
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
