@@ -64,7 +64,6 @@ jobs:
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
-        if: "!contains(github.event.commits[0].message, 'upgrade-version')"
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
