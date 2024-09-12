@@ -1,1 +1,1 @@
-published_qaextension_version=2.2.12
+published_qaextension_version=2.2.13
