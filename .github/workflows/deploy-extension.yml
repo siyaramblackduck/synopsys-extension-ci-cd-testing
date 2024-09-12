@@ -75,6 +75,10 @@ jobs:
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           echo $github_commit
+          echo ${{ github_commit }}
+          echo ${github_commit}
+          echo github_commit
+
 #          git checkout -b extension_version_update
 #          git add  vss-extension-dev.json extension_version.txt
 #          echo "Install dependencies && Rebuild the dist/ directory"
