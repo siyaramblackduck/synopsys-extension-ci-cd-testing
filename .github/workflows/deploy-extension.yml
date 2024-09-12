@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy-synopsys-extension:
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    if: "!contains(github.event.commits[0].message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
