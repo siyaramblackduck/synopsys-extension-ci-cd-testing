@@ -80,7 +80,6 @@ jobs:
           echo "github_message"
           echo $github_message
           echo ${github_message}
-          echo ${{ github_message }}
           echo github_message
           
           
