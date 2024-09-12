@@ -103,10 +103,6 @@ jobs:
           echo gh --version
           gh pr create --base main --head qaextension_version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}"
           gh pr merge --squash --subject "Extension version upgrade to ${{ env.NEW_VERSION }}  [skip ci]" --delete-branch
-#          git branch -d extension_version_update
-
-      #          git push origin main
-#          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

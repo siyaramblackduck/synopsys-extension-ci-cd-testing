@@ -65,31 +65,23 @@ jobs:
 
       - name: update extension version in file
         id: update-extension-version
-        if: "!contains(github.event.commits[0].message, 'upgrade-version')"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-          echo ${{ github.event.commits[0].message }}
-          ${{ github.event.commits[0].message }}
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          git checkout -b version_update
+          git checkout -b extension_version_update
           git add  vss-extension-dev.json extension_version.txt
           echo "Install dependencies && Rebuild the dist/ directory"
           cd synopsys-task && npm ci && npm run build && npm run package
           git add package.json package-lock.json task.json
           git commit -m "upgrade extension version to ${{ env.NEW_VERSION }} [skip ci]"
-          git push origin version_update
-          gh pr create --base main --head version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
-#          gh pr merge --squash --subject "Extension version upgrade to ${{ env.NEW_VERSION }} [skip ci]" --delete-branch
-#          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
-#          git push origin version_update
-#          gh pr merge --squash --subject "automated pr merge [skip ci]" --body " merging automated pr changes" --delete-branch
-#          git branch -d automatic_version_update
+          git push origin extension_version_update
+          gh pr create --base main --head extension_version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
+          gh pr merge --squash --subject "Extension version upgrade to ${{ env.NEW_VERSION }} [skip ci]" --delete-branch
+          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
 
-#          git push origin main
-#
 
 
 
