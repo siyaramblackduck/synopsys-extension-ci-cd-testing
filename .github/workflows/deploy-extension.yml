@@ -31,7 +31,7 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
           echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "commit message: " $COMMIT_MESSAGE     
-          if [[ "$COMMIT_MESSAGE" == *"upgrade-version"* ]]; then
+          if [[ "$COMMIT_MESSAGE" == *"version-upgrade"* ]]; then
              new_version=$current_extension_version
              echo "Updating vss-extension-dev.json with the new version: ${new_version}"
              jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
@@ -66,7 +66,7 @@ jobs:
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
-        if: "contains(env.COMMIT_MESSAGE, 'upgrade-version')"
+        if: "contains(env.COMMIT_MESSAGE, 'version-upgrade')"
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
