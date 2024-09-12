@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy-synopsys-extension:
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,6 +29,7 @@ jobs:
           current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
           current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
           COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
+          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
           echo "commit message: " $COMMIT_MESSAGE     
           if [[ "$COMMIT_MESSAGE" == *"upgrade-version"* ]]; then
              new_version=$current_extension_version
@@ -65,7 +66,7 @@ jobs:
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
-        if: "contains(github.event.head_commit.message, 'upgrade-version')"
+        if: ${{ "env.COMMIT_MESSAGE" == *"upgrade-version"* }}
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
