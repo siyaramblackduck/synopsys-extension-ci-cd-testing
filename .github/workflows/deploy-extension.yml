@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy-synopsys-extension:
-    if: "!contains(github.event.commits[0].message, '[skip ci]')"
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -69,14 +69,14 @@ jobs:
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-          github_commit: ${{ github.event.commits[0].message }}
-          github_message: github.event.commits[0].message
+          github_commit: ${{ github.event.head_commit.message }}
         run: |
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-         
-          
+          echo $github_commit
+          echo ${github_commit}
+          github_message="${{ github.event.head_commit.message }}"
           echo "github_message"
           echo $github_message
           echo ${github_message}
