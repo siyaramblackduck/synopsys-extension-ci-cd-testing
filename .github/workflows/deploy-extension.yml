@@ -61,11 +61,11 @@ jobs:
              new_version=$current_extension_version
              echo "Commit message does not contains 'upgrade-version' message"
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
-             exit 1
           fi     
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
+        if: "!contains(github.event.head_commit.message, 'upgrade-version')"
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
@@ -73,16 +73,7 @@ jobs:
         run: |
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
-          git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          echo $github_commit
-          echo ${github_commit}
-          github_message="${{ github.event.head_commit.message }}"
-          echo "github_message"
-          echo $github_message
-          echo ${github_message}
-          echo github_message
-          
-          
+          git config --local user.email "$(git log -n 1 --pretty=format:%ae)" 
 
 #          git checkout -b extension_version_update
 #          git add  vss-extension-dev.json extension_version.txt
