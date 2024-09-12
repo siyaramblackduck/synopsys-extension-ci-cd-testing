@@ -70,19 +70,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
           github_commit: ${{ github.event.commits[0].message }}
+          github_message: github.event.commits[0].message
         run: |
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          echo $github_commit
-          echo ${github_commit}
-          echo github_commit
+         
           
-#          echo "github_message"
-#          echo $github_message
-#          echo ${github_message}
-#          echo ${{ github_message }}
-#          echo github_message
+          echo "github_message"
+          echo $github_message
+          echo ${github_message}
+          echo ${{ github_message }}
+          echo github_message
           
           
 
