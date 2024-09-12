@@ -60,7 +60,7 @@ jobs:
              echo "Updated task.json file"
           else
              new_version=$current_extension_version
-             echo "Commit message does not contains 'upgrade-version' message"
+             echo "Commit message does not contains 'version-upgrade' message"
              echo "Extension version will not be updating automatically. Current version: ${new_version}"
           fi     
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
