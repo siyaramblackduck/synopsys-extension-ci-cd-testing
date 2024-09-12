@@ -69,14 +69,14 @@ jobs:
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-          github_commit: ${{ github.event.commits[0].message }}
+          GITHUB_COMMIT_MESSAGE: ${{ github.event.commits[0].message }}
         run: |
           echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
-          echo $github_commit
-          echo ${{ github_commit }}
-          echo ${github_commit}
+          echo $GITHUB_COMMIT_MESSAGE
+          echo ${{ GITHUB_COMMIT_MESSAGE }}
+          echo ${GITHUB_COMMIT_MESSAGE}
 
 #          git checkout -b extension_version_update
 #          git add  vss-extension-dev.json extension_version.txt
