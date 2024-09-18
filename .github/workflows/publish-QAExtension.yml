@@ -37,11 +37,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-          vss_extension_dev=$(cat vss-extension-dev.json)
-          extension_name=$(echo $vss_extension_dev | jq -r '.name' )
+          extension_name=$(jq -r '.name' < vss-extension-dev.json) 
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
           echo "EXTENSION NAME: "$extension_name
-          current_extension_version=$(echo $vss_extension_dev | jq -r '.version')
+          current_extension_version=$(jq -r '.version' < vss-extension-dev.json) 
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT QAEXTENSION VERSION: " $current_extension_version
           previous_published_qaextension_version=$(grep 'published_qaextension_version' extension_version.txt | cut -d '=' -f 2)
