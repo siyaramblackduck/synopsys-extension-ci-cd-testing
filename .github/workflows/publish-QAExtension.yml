@@ -12,9 +12,25 @@ jobs:
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v4
-
         with:
           node-version: 20.x
+
+      - name: Install dependencies
+        run: cd synopsys-task && npm ci
+
+      - name: Rebuild the dist/ directory
+        run: cd synopsys-task && npm run build && npm run package
+
+      - name: Compare the expected and actual dist/ directories
+        run: |
+          cd synopsys-task
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
+
 
       - name: versioning
         id: version-update
