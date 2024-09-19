@@ -6,6 +6,7 @@ on:
       isPublish:
          description: 'DO YOU WANT TO PUBLISH SYNOPSYS EXTENSION TO MARKETPLACE'
          required: true
+         default: false
          type: boolean
 
 jobs:
@@ -60,6 +61,7 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
+        if: ${{ steps.publish-extension.conclusion == 'success' }}
         with:
           name: ${{ env.EXTENSION_NAME }}-${{ env.EXTENSION_VERSION }}.vsix
           path: "*.vsix"
