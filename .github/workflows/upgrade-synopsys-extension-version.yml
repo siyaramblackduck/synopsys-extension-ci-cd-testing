@@ -59,12 +59,12 @@ jobs:
           sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
           cat extension_version.txt
           echo "Updated extension_version.txt file"
-          echo
-          
+          echo      
           cd synopsys-task 
           echo "Updating package.json with the new version: ${new_version}"
           jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
           echo "Updated package.json file"
+          cat package.json
           echo
 
           echo "Updating package-lock.json with the new version: ${new_version}"
@@ -88,8 +88,7 @@ jobs:
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git checkout -b extension_version_update
           git add  vss-extension-dev.json extension_version.txt
-          echo "Install dependencies && Rebuild the dist/ directory"
-          cd synopsys-task && npm ci && npm run build && npm run package
+          cd synopsys-task
           git add package.json package-lock.json task.json
           git commit -m "upgrade extension version to ${{ env.NEW_VERSION }} [skip ci]"
           git push origin extension_version_update
