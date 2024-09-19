@@ -2,6 +2,11 @@ name: publish-synopsys-extension
 
 on:
   workflow_dispatch:
+    inputs:
+      publish-synopsys-extension:
+         description: 'DO YOU WANT TO PUBLISH SYNOPSYS EXTENSION TO MARKETPLACE'
+         required: true
+         default: ''
 
 jobs:
   publish-synopsys-extension:
@@ -38,7 +43,6 @@ jobs:
           extension_version=$(jq -r '.version' < vss-extension.json) 
           echo "EXTENSION_VERSION=$extension_version" >> $GITHUB_ENV
           echo "EXTENSION VERSION: " $extension_version
-          echo "Extension Name:" $extension_name
           echo "Installing tfx-cli..."
           npm i -g tfx-cli
           echo "Creating extension $extension_name with version $extension_version"
@@ -52,7 +56,6 @@ jobs:
             echo "Failed to publish the extension $extension_name with version $extension_version."
             exit 1
           fi
-          
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
