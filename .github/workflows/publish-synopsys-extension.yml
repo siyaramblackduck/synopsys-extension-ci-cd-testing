@@ -10,7 +10,7 @@ on:
 
 jobs:
   publish-synopsys-extension:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: ${{ "!contains(github.event.head_commit.message, '[skip ci]')" && github.event.inputs.isPublish == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
 
       - name: publish-Extension
         id: publish-extension
-        if: ${{ github.event.inputs.isPublish == 'true' }}
+        if: ${{ github.event.inputs.isPublish == 'true' ||  }}
         env:
           PROD_PUBLISHER_NAME: ${{ secrets.PROD_PUBLISHER_NAME }}
           PROD_ORGANIZATION_NAME: ${{ secrets.PROD_ORG_NAME }}
