@@ -32,7 +32,7 @@ jobs:
           PROD_ORGANIZATION_NAME: ${{ secrets.PROD_ORG_NAME }}
           PROD_USER_TOKEN: ${{ secrets.PROD_USER_TOKEN }} #personal_access_token of azure devops account
         run: |
-          vss_extension_dev=$(cat vss-extension.json)
+          vss_extension=$(cat vss-extension.json)
           extension_name=$(echo $vss_extension | jq -r '.name' )
           echo "Extension Name:" $extension_name
           extension_version=$(echo $vss_extension | jq -r '.version')
