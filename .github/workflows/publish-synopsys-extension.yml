@@ -66,3 +66,4 @@ jobs:
           name: ${{ env.EXTENSION_NAME }}-${{ env.EXTENSION_VERSION }}.vsix
           path: "*.vsix"
 
+
