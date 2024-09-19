@@ -32,11 +32,13 @@ jobs:
           PROD_ORGANIZATION_NAME: ${{ secrets.PROD_ORG_NAME }}
           PROD_USER_TOKEN: ${{ secrets.PROD_USER_TOKEN }} #personal_access_token of azure devops account
         run: |
-          vss_extension=$(cat vss-extension.json)
-          extension_name=$(echo $vss_extension | jq -r '.name' )
+          extension_name=$(jq -r '.name' < vss-extension.json) 
+          echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
+          echo "EXTENSION NAME: "$extension_name
+          extension_version=$(jq -r '.version' < vss-extension.json) 
+          echo "EXTENSION_VERSION=$extension_version" >> $GITHUB_ENV
+          echo "EXTENSION VERSION: " $extension_version
           echo "Extension Name:" $extension_name
-          extension_version=$(echo $vss_extension | jq -r '.version')
-          echo "Extension Version:" $extension_version
           echo "Installing tfx-cli..."
           npm i -g tfx-cli
           echo "Creating extension $extension_name with version $extension_version"
@@ -55,6 +57,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.EXTENSION_NAME }}-${{ env.NEW_VERSION }}.vsix
+          name: ${{ env.EXTENSION_NAME }}-${{ env.EXTENSION_VERSION }}.vsix
           path: "*.vsix"
 
