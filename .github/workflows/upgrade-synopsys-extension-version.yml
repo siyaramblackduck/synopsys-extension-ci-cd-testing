@@ -2,22 +2,19 @@ name: upgrade-synopsys-extension-version
 
 on:
   workflow_dispatch:
-    inputs:
-      isPublish:
-        description: 'DO YOU WANT TO UPGRADE SYNOPSYS EXTENSION VERSION'
-        required: true
-        default: false
-        type: boolean
 
 jobs:
   upgrade-synopsys-extension-version:
-    if: ${{ github.event.inputs.isPublish == 'true' }}
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
       - name: Install dependencies
         run: cd synopsys-task && npm ci
 
@@ -48,37 +45,45 @@ jobs:
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
           current_minor=$(echo $current_extension_version | awk -F. '{print $2}')
           current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B | head -n 1)
+          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+          echo "commit message: " $COMMIT_MESSAGE     
+          if [[ "$COMMIT_MESSAGE" == *"version-upgrade"* ]]; then
+             new_version=$current_extension_version
+             echo "Updating vss-extension-dev.json with the new version: ${new_version}"
+             jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
+             echo "Updated vss-extension-dev.json file"
+             cat vss-extension-dev.json
           
-          new_version=$current_extension_version
-          echo "Updating vss-extension-dev.json with the new version: ${new_version}"
-          jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
-          echo "Updated vss-extension-dev.json file"
-          cat vss-extension-dev.json
+             echo "Updating extension_version.txt with the new version: ${new_version}"
+             sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
+             cat extension_version.txt
+             echo "Updated extension_version.txt file"
+             echo
           
-          echo "Updating extension_version.txt with the new version: ${new_version}"
-          sed -i "s/published_qaextension_version=.*/published_qaextension_version=$new_version/" extension_version.txt
-          cat extension_version.txt
-          echo "Updated extension_version.txt file"
-          echo
-          
-          cd synopsys-task 
-          echo "Updating package.json with the new version: ${new_version}"
-          jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
-          echo "Updated package.json file"
-          echo
+             cd synopsys-task 
+             echo "Updating package.json with the new version: ${new_version}"
+             jq --arg new_version "$new_version" '.version = $new_version' package.json > package.json.tmp && mv package.json.tmp package.json
+             echo "Updated package.json file"
+             echo
 
-          echo "Updating package-lock.json with the new version: ${new_version}"
-          jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
-          echo "Updated package-lock.json file"
-          echo
+             echo "Updating package-lock.json with the new version: ${new_version}"
+             jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
+             echo "Updated package-lock.json file"
+             echo
           
-          echo "Updating task.json with the new version: ${new_version}"
-          jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
-          echo "Updated task.json file"    
-        
+             echo "Updating task.json with the new version: ${new_version}"
+             jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
+             echo "Updated task.json file"
+          else
+             new_version=$current_extension_version
+             echo "Commit message does not contains 'version-upgrade' message"
+             echo "Extension version will not be updating automatically. Current version: ${new_version}"
+          fi     
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
+        if: "contains(env.COMMIT_MESSAGE, 'version-upgrade')"
         id: update-extension-version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
@@ -96,8 +101,3 @@ jobs:
           gh pr create --base main --head extension_version_update --title "Version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
           gh pr merge --squash --subject "Extension version upgrade to ${{ env.NEW_VERSION }} [skip ci]" --delete-branch
           echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
-
-
-
-
-
