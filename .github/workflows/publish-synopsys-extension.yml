@@ -33,7 +33,7 @@ jobs:
 
       - name: publish-Extension
         id: publish-extension
-        if: ${{ github.event.inputs.isPublish == 'true' ||  }}
+        if: ${{ github.event.inputs.isPublish == 'true' }}
         env:
           PROD_PUBLISHER_NAME: ${{ secrets.PROD_PUBLISHER_NAME }}
           PROD_ORGANIZATION_NAME: ${{ secrets.PROD_ORG_NAME }}
