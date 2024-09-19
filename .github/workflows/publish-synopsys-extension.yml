@@ -6,7 +6,6 @@ on:
       isPublish:
          description: 'DO YOU WANT TO PUBLISH SYNOPSYS EXTENSION TO MARKETPLACE'
          required: true
-         default: false
          type: boolean
 
 jobs:
