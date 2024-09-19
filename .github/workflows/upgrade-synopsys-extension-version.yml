@@ -1,10 +1,10 @@
-name: deploy-synopsys-extension
+name: upgrade-synopsys-extension-version
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-synopsys-extension:
+  upgrade-synopsys-extension-version:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
