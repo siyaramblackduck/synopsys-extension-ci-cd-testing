@@ -3,10 +3,11 @@ name: publish-synopsys-extension
 on:
   workflow_dispatch:
     inputs:
-      publish-synopsys-extension:
+      isPublish:
          description: 'DO YOU WANT TO PUBLISH SYNOPSYS EXTENSION TO MARKETPLACE'
          required: true
-         default: ''
+         default: false
+         type: boolean
 
 jobs:
   publish-synopsys-extension:
@@ -32,6 +33,7 @@ jobs:
 
       - name: publish-Extension
         id: publish-extension
+        if: ${{ github.event.inputs.isPublish == 'true' }}
         env:
           PROD_PUBLISHER_NAME: ${{ secrets.PROD_PUBLISHER_NAME }}
           PROD_ORGANIZATION_NAME: ${{ secrets.PROD_ORG_NAME }}
