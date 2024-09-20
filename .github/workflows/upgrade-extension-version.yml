@@ -1,4 +1,4 @@
-name: upgrade-synopsys-extension-version
+name: upgrade-extension-version
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
         type: boolean
 
 jobs:
-  upgrade-synopsys-extension-version:
+  upgrade-extension-version:
     if: ${{ github.event.inputs.isUpgrade == 'true' }}
     runs-on: ubuntu-latest
     steps:
