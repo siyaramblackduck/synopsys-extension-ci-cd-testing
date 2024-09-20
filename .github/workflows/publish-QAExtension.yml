@@ -113,7 +113,6 @@ jobs:
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git checkout -b qaextension_version_update
-          git pull origin main
           git add  vss-extension-dev.json extension_version.txt
           git commit -m "update extension version to ${{ env.NEW_VERSION }} [skip ci]"
           git push origin qaextension_version_update
