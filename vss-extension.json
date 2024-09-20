@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "synopsys-security-scan",
   "name": "Synopsys Security Scan",
-  "version": "2.2.12",
+  "version": "2.3.0",
   "publisher": "TestCIPub",
   "public": false,
   "targets": [
