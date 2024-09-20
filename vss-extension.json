@@ -1,9 +1,9 @@
 {
   "manifestVersion": 1,
-  "id": "synopsys-security-scan",
-  "name": "Synopsys Security Scan",
+  "id": "Prod-extension-test",
+  "name": "Prod Extension Test",
   "version": "2.4.0",
-  "publisher": "TestCIPub",
+  "publisher": "TestBlackduckExtension",
   "public": false,
   "targets": [
     {
