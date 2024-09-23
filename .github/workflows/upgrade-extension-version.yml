@@ -16,7 +16,7 @@ on:
 
 jobs:
   upgrade-extension-version:
-    if: ${{ github.event.inputs.isUpgrade == 'true' && contains(github.event.inputs.version, '') }}
+    if: ${{ github.event.inputs.isUpgrade == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
           extension_name=$(jq -r '.name' < vss-extension.json) 
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
           echo "EXTENSION NAME: "$extension_name
-          current_extension_version=$github.event.inputs.version
+          current_extension_version=${{ github.event.inputs.version }}
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT EXTENSION VERSION: " $current_extension_version
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
