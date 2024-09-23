@@ -4,14 +4,19 @@ on:
   workflow_dispatch:
     inputs:
       isUpgrade:
-        description: 'DO YOU WANT TO UPGRADE SYNOPSYS EXTENSION VERSION'
+        description: 'DO YOU WANT TO UPGRADE EXTENSION VERSION'
         required: true
         default: false
-        type: boolean
+        type: boolean 
+      version:
+        description: 'EXTENSION VERSION'
+        required: true
+        default: ""
+        type: string
 
 jobs:
   upgrade-extension-version:
-    if: ${{ github.event.inputs.isUpgrade == 'true' }}
+    if: ${{ github.event.inputs.isUpgrade == 'true' &&  github.event.inputs.version != "" }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +47,7 @@ jobs:
           extension_name=$(jq -r '.name' < vss-extension.json) 
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
           echo "EXTENSION NAME: "$extension_name
-          current_extension_version=$(jq -r '.version' < vss-extension.json) 
+          current_extension_version=$github.event.inputs.version
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT EXTENSION VERSION: " $current_extension_version
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
@@ -91,8 +96,3 @@ jobs:
           git push origin extension_version_update --force
           gh pr create --base main --head extension_version_update --title "Extension version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
           echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
-
-
-
-
-
