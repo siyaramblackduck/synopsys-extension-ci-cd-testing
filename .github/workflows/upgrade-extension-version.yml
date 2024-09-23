@@ -55,6 +55,12 @@ jobs:
           current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
           
           new_version=$current_extension_version
+          echo "Updating vss-extension.json with the new version: ${new_version}"
+          jq --arg new_version "$new_version" '.version = $new_version' vss-extension.json > vss-extension.json.tmp && mv vss-extension.json.tmp vss-extension.json
+          echo "Updated vss-extension.json file"
+          cat vss-extension.json
+          echo
+          
           echo "Updating vss-extension-dev.json with the new version: ${new_version}"
           jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           echo "Updated vss-extension-dev.json file"
