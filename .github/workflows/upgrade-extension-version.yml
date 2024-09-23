@@ -3,11 +3,6 @@ name: upgrade-extension-version
 on:
   workflow_dispatch:
     inputs:
-      isUpgrade:
-        description: 'DO YOU WANT TO UPGRADE EXTENSION VERSION'
-        required: true
-        default: false
-        type: boolean 
       version:
         description: 'EXTENSION VERSION'
         required: true
@@ -16,7 +11,6 @@ on:
 
 jobs:
   upgrade-extension-version:
-    if: ${{ github.event.inputs.version != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
