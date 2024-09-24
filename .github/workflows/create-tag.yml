@@ -11,7 +11,7 @@ on:
       TAG_BODY:
         description: 'TAG DESCRIPTION'
         required: false
-        default: ""
+        default: "Line 1\nLine 2\n"
         type: string
       IS_DRAFT:
         description: 'CREATE AS DRAFT'
