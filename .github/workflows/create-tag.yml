@@ -49,15 +49,21 @@ jobs:
             exit 1
           fi
         id: diff
-
-      - name: Create Tag
-        id: create_tag
+      - name: replace \n
+        id: process_body
+        run: |
+           processed_body = "${{ github.event.inputs.TAG_BODY }}"
+           processed_body = "${{processed_body//\\n\$'\n'}}"
+           echo "$processed_body">>processed_body.txt
+        
+      - name: Create Release
+        id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           tag_name: ${{ github.event.inputs.TAG }}
           release_name: "SYNOPSYS EXTENSION ${{ github.event.inputs.TAG }}"
-          body: ${{ github.event.inputs.TAG_BODY }}
+          body: processed_body.txt
           draft: ${{ github.event.inputs.IS_DRAFT }}
           prerelease: ${{ github.event.inputs.IS_PRERELEASE }}
