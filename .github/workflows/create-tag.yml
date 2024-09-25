@@ -53,7 +53,7 @@ jobs:
         id: process_body
         run: |
            processed_body = "${{ github.event.inputs.TAG_BODY }}"
-           processed_body = "${{processed_body//\\n\$'\n'}}"
+           processed_body = "${processed_body//\\n/$'\n'}"
            echo "$processed_body">>processed_body.txt
         
       - name: Create Release
