@@ -54,7 +54,7 @@ jobs:
         id: process_body
         run: |
           tag_body="${{ github.event.inputs.TAG_BODY }}"
-          echo "${tag_body}">>processed_body.txt
+          echo "${tag_body//$'\n'/'\n'}">>processed_body.txt
           cat processed_body.txt
           processed_body=$(cat processed_body.txt | tr '\n' '\\n')
           echo "PROCESSED_BODY=${processed_body}">>$GITHUB_ENV
