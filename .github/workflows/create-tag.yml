@@ -56,7 +56,7 @@ jobs:
           tag_body="${{ github.event.inputs.TAG_BODY }}"
           echo "${tag_body}">>processed_body.txt
           cat processed_body.txt
-          processed_body=$(cat procces_body.txt | tr '\n' '\\n')
+          processed_body=$(cat processed_body.txt | tr '\n' '\\n')
           echo "PROCESSED_BODY=${processed_body}">>$GITHUB_ENV
         
       - name: Create Release
