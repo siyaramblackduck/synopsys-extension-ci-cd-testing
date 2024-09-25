@@ -49,11 +49,12 @@ jobs:
             exit 1
           fi
         id: diff
+        
       - name: replace \n
         id: process_body
         run: |
-           body = "${{ github.event.inputs.TAG_BODY }}"
-           echo "${body}">processed_body.txt
+          tag_body = "${{ github.event.inputs.TAG_BODY }}"
+          echo "${tag_body}">processed_body.txt
         
       - name: Create Release
         id: create_release
