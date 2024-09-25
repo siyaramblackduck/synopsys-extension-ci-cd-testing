@@ -53,7 +53,7 @@ jobs:
       - name: replace \n
         id: process_body
         run: |
-          tag_body = "${{ github.event.inputs.TAG_BODY }}"
+          tag_body="${{ github.event.inputs.TAG_BODY }}"
           echo "hi"
           echo "$tag_body"
         
