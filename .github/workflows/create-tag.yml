@@ -52,9 +52,8 @@ jobs:
       - name: replace \n
         id: process_body
         run: |
-           processed_body = "${{ github.event.inputs.TAG_BODY }}"
-           processed_body = "${processed_body//\\n/$'\n'}"
-           echo "$processed_body">>processed_body.txt
+           body = "${{ github.event.inputs.TAG_BODY }}"
+           echo "${body//\\n/$'\n'}">processed_body.txt
         
       - name: Create Release
         id: create_release
