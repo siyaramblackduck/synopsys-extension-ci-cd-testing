@@ -76,7 +76,7 @@ jobs:
           echo "Updating task.json with the new version: ${new_version}"
           jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
           echo "Updated task.json file"    
-        
+          
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
@@ -84,15 +84,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
-          echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
+          echo "Updating extension version in vss-extension.json, vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git checkout -b extension_version_update
           git pull origin extension_version_update --rebase || true
-          git add  vss-extension-dev.json extension_version.txt
+          git add  vss-extension.json vss-extension-dev.json extension_version.txt
           cd synopsys-task
           git add package.json package-lock.json task.json
           git commit -m "upgrade extension version to ${{ env.NEW_VERSION }} [skip ci]"
           git push origin extension_version_update --force
           gh pr create --base main --head extension_version_update --title "Extension version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
-          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
+          echo "Successful updated extension version in vss-extension.json, vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
