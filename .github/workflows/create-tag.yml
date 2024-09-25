@@ -54,8 +54,10 @@ jobs:
         id: process_body
         run: |
           tag_body="${{ github.event.inputs.TAG_BODY }}"
-          echo "${tag_body//$'\n'/'%0A'}">>processed_body.txt
+          echo "${tag_body//$'\n'/'\n'}">>processed_body.txt
           cat processed_body.txt
+          processed_body=$(cat procces_body.txt | tr '\n' '\\n')
+          echo "PROCESSED_BODY=${processed_boody}">>$GITHUB_ENV
         
       - name: Create Release
         id: create_release
@@ -65,6 +67,6 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.TAG }}
           release_name: "SYNOPSYS EXTENSION ${{ github.event.inputs.TAG }}"
-          body: processed_body.txt
+          body: ${{ env.PROCESSED_BODY }}
           draft: ${{ github.event.inputs.IS_DRAFT }}
           prerelease: ${{ github.event.inputs.IS_PRERELEASE }}
