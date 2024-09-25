@@ -57,7 +57,7 @@ jobs:
           echo "${tag_body}">>processed_body.txt
           sed -i 's/\\n/\n/g' processed_body.txt
           cat processed_body.txt
-          processed_body=$(cat processed_body | tr '\n' '\n')
+          processed_body=$(cat processed_body.txt | tr '\n' '\n')
           echo "PROCESSED_BODY=${processed_body}">>$GITHUB_ENV
         
       - name: Create Release
