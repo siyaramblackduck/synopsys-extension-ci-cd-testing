@@ -54,7 +54,7 @@ jobs:
         id: process_body
         run: |
           tag_body = "${{ github.event.inputs.TAG_BODY }}"
-          echo "${tag_body}">processed_body.txt
+          echo "$tag_body">>processed_body.txt
         
       - name: Create Release
         id: create_release
