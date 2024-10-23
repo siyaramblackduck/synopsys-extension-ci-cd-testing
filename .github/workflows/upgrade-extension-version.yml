@@ -35,8 +35,6 @@ jobs:
 
       - name: versioning
         id: version-update
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           extension_name=$(jq -r '.name' < vss-extension.json) 
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
