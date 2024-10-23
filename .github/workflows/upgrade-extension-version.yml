@@ -11,6 +11,8 @@ on:
 
 jobs:
   upgrade-extension-version:
+    permissions:
+        pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
