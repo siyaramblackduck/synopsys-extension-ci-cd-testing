@@ -106,8 +106,6 @@ jobs:
       - name: update extension version in file
         id: update-extension-version
         if: ${{  steps.publish-qaextension.conclusion == 'success'  }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         run: |
           echo "Updating extension version in vss-extension-dev.json & extension_version.txt file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
