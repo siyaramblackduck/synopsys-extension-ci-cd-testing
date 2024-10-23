@@ -86,10 +86,11 @@ jobs:
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git checkout -b extension_version_update
-          git pull origin extension_version_update --rebase || true
+          git pull origin extension_version_update 
           cd synopsys-task
           npm i
           npm run all
+          cd ../
           git add .
           git commit -m "upgrade extension version to ${{ env.NEW_VERSION }} [skip ci]"
           git push origin extension_version_update --force
