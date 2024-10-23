@@ -3,21 +3,23 @@ name: upgrade-extension-version
 on:
   workflow_dispatch:
     inputs:
-      isUpgrade:
-        description: 'DO YOU WANT TO UPGRADE SYNOPSYS EXTENSION VERSION'
+      version:
+        description: 'EXTENSION VERSION'
         required: true
-        default: false
-        type: boolean
+        default: ""
+        type: string
 
 jobs:
   upgrade-extension-version:
-    if: ${{ github.event.inputs.isUpgrade == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Set Node.js 20.x
         uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
       - name: Install dependencies
         run: cd synopsys-task && npm ci
 
@@ -37,12 +39,12 @@ jobs:
       - name: versioning
         id: version-update
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           extension_name=$(jq -r '.name' < vss-extension.json) 
           echo "EXTENSION_NAME=$extension_name" >> $GITHUB_ENV
           echo "EXTENSION NAME: "$extension_name
-          current_extension_version=$(jq -r '.version' < vss-extension.json) 
+          current_extension_version=${{ github.event.inputs.version }}
           echo "CURRENT_VERSION=$current_extension_version" >> $GITHUB_ENV
           echo "CURRENT EXTENSION VERSION: " $current_extension_version
           current_major=$(echo $current_extension_version | awk -F. '{print $1}')
@@ -50,6 +52,12 @@ jobs:
           current_patch=$(echo $current_extension_version | awk -F. '{print $3}')
           
           new_version=$current_extension_version
+          echo "Updating vss-extension.json with the new version: ${new_version}"
+          jq --arg new_version "$new_version" '.version = $new_version' vss-extension.json > vss-extension.json.tmp && mv vss-extension.json.tmp vss-extension.json
+          echo "Updated vss-extension.json file"
+          cat vss-extension.json
+          echo
+          
           echo "Updating vss-extension-dev.json with the new version: ${new_version}"
           jq --arg new_version "$new_version" '.version = $new_version' vss-extension-dev.json > vss-extension-dev.json.tmp && mv vss-extension-dev.json.tmp vss-extension-dev.json
           echo "Updated vss-extension-dev.json file"
@@ -62,37 +70,29 @@ jobs:
           echo "Updated package.json file"
           cat package.json
           echo
-
-          echo "Updating package-lock.json with the new version: ${new_version}"
-          jq --arg new_version "$new_version" '(.version = $new_version) | (.packages[""].version = $new_version)' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
-          echo "Updated package-lock.json file"
-          echo
           
           echo "Updating task.json with the new version: ${new_version}"
           jq --argjson major "$current_major" --argjson minor "$current_minor"  --argjson patch "$current_patch" '(.version.Major = $major) | (.version.Minor = $minor) | (.version.Patch = $patch)' task.json > task.json.tmp && mv task.json.tmp task.json
           echo "Updated task.json file"    
-        
+          
           echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
 
       - name: update extension version in file
         id: update-extension-version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Updating extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
+          echo "Updating extension version in vss-extension.json, vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file"
           git config --local user.name "$(git log -n 1 --pretty=format:%an)"
           git config --local user.email "$(git log -n 1 --pretty=format:%ae)"
           git checkout -b extension_version_update
-          git pull origin extension_version_update --rebase || true
-          git add  vss-extension-dev.json extension_version.txt
+          git pull origin extension_version_update 
+          git add  vss-extension.json vss-extension-dev.json extension_version.txt
           cd synopsys-task
+          npm i
+          npm run all
           git add package.json package-lock.json task.json
           git commit -m "upgrade extension version to ${{ env.NEW_VERSION }} [skip ci]"
           git push origin extension_version_update --force
           gh pr create --base main --head extension_version_update --title "Extension version upgrade to ${{ env.NEW_VERSION }}" --body "${{ env.EXTENSION_NAME }} version upgrade to ${{ env.NEW_VERSION }}" --fill
-          echo "Successful updated extension version in vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
-
-
-
-
-
+          echo "Successful updated extension version in vss-extension.json, vss-extension-dev.json, extension_version.txt, package.json, package-lock.json & task.json file..."
